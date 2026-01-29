@@ -84,6 +84,49 @@ const ServicesPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <section className="py-24 lg:py-32 bg-white border-t border-navy/5">
+        <div className="container mx-auto px-6">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="space-y-4">
+              <div className="section-label">ANALYTICS + INTENT CAPTURE (BUILT-IN, NOT AFTERTHOUGHT)</div>
+              <p className="text-lg text-slate-600 font-light leading-relaxed">
+                Intent Signals We Capture, How InfraX Uses This Data, and the Stack Recommendation are designed to create a strategic asset, not just marketing data.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-10">
+              <div className="p-8 border border-navy/10 bg-slate-50 space-y-6">
+                <h3 className="text-sm font-black uppercase tracking-widest text-navy">Intent Signals We Capture</h3>
+                <ul className="space-y-3 text-sm text-slate-600 font-light">
+                  <li>Behavioral: ticker page dwell time, market region views, metric interactions, repeat visits.</li>
+                  <li>Content Signals: InfraAlign™ page depth, downloaded materials, CTA sequencing.</li>
+                  <li>Declared Intent: match requests, partner inquiries, market alerts signups.</li>
+                </ul>
+              </div>
+              <div className="p-8 border border-navy/10 bg-slate-50 space-y-6">
+                <h3 className="text-sm font-black uppercase tracking-widest text-navy">How InfraX Uses This Data</h3>
+                <ul className="space-y-3 text-sm text-slate-600 font-light">
+                  <li>Prioritize high-intent buyers.</li>
+                  <li>Shape outreach timing.</li>
+                  <li>Identify emerging demand patterns.</li>
+                  <li>Feed InfraAlign™ learning loops.</li>
+                </ul>
+              </div>
+              <div className="p-8 border border-navy/10 bg-slate-50 space-y-6">
+                <h3 className="text-sm font-black uppercase tracking-widest text-navy">Stack Recommendation (Direct, No BS)</h3>
+                <ul className="space-y-3 text-sm text-slate-600 font-light">
+                  <li>Analytics: GA4 + privacy-respecting overlay.</li>
+                  <li>Heatmaps: lightweight behavioral tool.</li>
+                  <li>CRM sync: deal and partner tracking.</li>
+                  <li>AI layer: pattern detection across visits.</li>
+                </ul>
+                <p className="text-sm font-bold uppercase tracking-widest text-[#f37021]">If you want, I’ll spec the exact stack next.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

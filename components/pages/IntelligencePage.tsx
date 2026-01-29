@@ -8,13 +8,15 @@ const IntelligencePage: React.FC = () => {
       <div className="container mx-auto px-6 pb-32">
         <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-12 max-w-6xl mx-auto">
           <div className="max-w-3xl space-y-6">
-            <div className="section-label !text-[#f37021]">Market Intelligence Ticker</div>
+            <div className="section-label !text-[#f37021]">NEW: INTELLIGENCE (TICKER PAGE)</div>
             <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none">
               Live <br />Signals.
             </h1>
+            <p className="text-sm text-white/60 font-bold uppercase tracking-[0.3em]">Infrastructure Intelligence Ticker</p>
+            <p className="text-sm text-white/60 font-bold uppercase tracking-[0.3em]">Purpose: Make InfraX a daily reference point, not a brochure.</p>
           </div>
           <p className="text-xl text-white/40 font-light max-w-sm">
-            Curated market signals across data center capacity, power availability, and regional demand spikes.
+            Live, curated market signals across data center capacity, power availability and constraints, new builds and expansions, off-market deal indicators, regional demand spikes, and regulatory and utility developments.
           </p>
         </div>
 
@@ -33,6 +35,10 @@ const IntelligencePage: React.FC = () => {
         </div>
 
         {/* Ticker Sections Grid */}
+        <div className="mb-10 space-y-3">
+          <div className="section-label !text-[#f37021]">Ticker Sections</div>
+          <p className="text-sm text-white/60">Now Trending, Deal Signals, and Operational Alerts surface regional bottlenecks, emerging secondary markets, cooling and density shifts, capacity coming to market quietly, buyer demand indicators, partner-side availability changes, utility delays, interconnection backlogs, and equipment lead-time risks.</p>
+        </div>
         <div className="grid lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
           {/* Section: Now Trending */}
           <div className="p-12 space-y-10 group bg-navy hover:bg-white/5 transition-colors">
@@ -91,12 +97,32 @@ const IntelligencePage: React.FC = () => {
 
         {/* AI Insight Bar */}
         <div className="mt-24 p-10 bg-white/5 border border-[#f37021]/30 flex items-start gap-6 relative">
-          <div className="absolute top-0 right-10 -translate-y-1/2 px-4 py-1 bg-[#f37021] text-xs font-black uppercase tracking-widest">InFraX AI Summary</div>
+          <div className="absolute top-0 right-10 -translate-y-1/2 px-4 py-1 bg-[#f37021] text-xs font-black uppercase tracking-widest">AI Notes</div>
           <Info className="w-8 h-8 text-[#f37021] flex-shrink-0 mt-1" />
-          <p className="text-lg text-white/80 font-light leading-relaxed">
-            Market transition is accelerating. Supply-side constraints are moving from space to power-ready shells. Regional focus is shifting toward secondary metros with utility headroom over primary saturated hubs.
-          </p>
+          <div className="space-y-3">
+            <p className="text-lg text-white/80 font-light leading-relaxed">
+              Short machine-generated summaries translating raw data into implications.
+            </p>
+            <p className="text-sm text-white/60 font-light">
+              Market transition is accelerating. Supply-side constraints are moving from space to power-ready shells. Regional focus is shifting toward secondary metros with utility headroom over primary saturated hubs.
+            </p>
+          </div>
         </div>
+
+        {/* Why This Matters */}
+        <section className="mt-24 bg-white/5 border border-white/10 p-12 lg:p-16 space-y-8">
+          <h2 className="text-3xl font-black uppercase tracking-tighter">Why This Matters</h2>
+          <div className="grid md:grid-cols-2 gap-10 text-white/70 text-sm font-light">
+            <ul className="space-y-4">
+              <li>Builds authority.</li>
+              <li>Trains the market.</li>
+            </ul>
+            <ul className="space-y-4">
+              <li>Captures intent.</li>
+              <li>Drives repeat visits.</li>
+            </ul>
+          </div>
+        </section>
       </div>
     </div>
   );

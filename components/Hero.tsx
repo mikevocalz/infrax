@@ -51,7 +51,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           
           <h1 className="headline-lg mb-10 text-white leading-[0.85] drop-shadow-2xl">
             Smarter Infrastructure <br />
-            <span className="text-[#f37021]" style={{ WebkitTextStroke: '1.5px #f37021', color: 'transparent' }}>Decisions</span> Start Here.
+            <span className="text-[#f37021]" style={{ WebkitTextStroke: '1.5px #f37021', color: 'transparent' }}>Decisions</span> Start Here
           </h1>
           
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16">
@@ -59,19 +59,22 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               AI-powered infrastructure matching combined with disciplined, vendor-agnostic execution across data centers, power, cloud, equipment, and connectivity.
             </p>
             <div className="flex flex-col sm:flex-row gap-5 pt-2">
-              <button 
+              <button
                 onClick={() => onNavigate?.('contact')}
                 className="px-10 py-6 bg-[#f37021] text-white font-black uppercase tracking-widest flex items-center justify-center gap-3 group transition-all hover:bg-white hover:text-[#000d1a] shadow-[0_0_30px_rgba(243,112,33,0.3)]"
               >
-                Request A Match
+                Request an InfraAlign™ Match
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </button>
-              <button 
+              <button
                 onClick={() => onNavigate?.('intelligence')}
                 className="px-10 py-6 border border-white/30 text-white font-black uppercase tracking-widest transition-all hover:bg-white/10 backdrop-blur-sm"
               >
-                Market Intelligence
+                View Market Intelligence
               </button>
+            </div>
+            <div className="text-xs text-white/60 font-mono uppercase tracking-[0.3em]">
+              Primary CTA: Request an InfraAlign™ Match • Secondary CTA: View Market Intelligence
             </div>
           </div>
         </div>

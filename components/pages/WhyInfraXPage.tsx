@@ -8,13 +8,13 @@ const WhyInfraXPage: React.FC = () => {
         {/* Header */}
         <div className="grid lg:grid-cols-2 gap-20 items-end max-w-6xl mx-auto">
           <div className="space-y-6">
-            <div className="section-label">Our Philosophy</div>
+            <div className="section-label">WHY INFrax (UNCHANGED, STRONG)</div>
             <h1 className="text-5xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
               WHY <br /><span className="text-[#f37021]">INFRAX.</span>
             </h1>
           </div>
           <p className="text-xl md:text-2xl text-[#64748b] font-light leading-relaxed">
-            We are not brokers. We are strategic advisors who combine AI-driven intelligence with disciplined execution.
+            We are not brokers. We do not push inventory, take placement fees that bias advice, or flood inboxes with vendor decks. We filter ruthlessly, surface reality early, enforce disciplined evaluation, and stay accountable through delivery.
           </p>
         </div>
 
@@ -24,19 +24,19 @@ const WhyInfraXPage: React.FC = () => {
             <ShieldCheck className="w-16 h-16 text-[#f37021]" />
             <h3 className="text-4xl font-black uppercase tracking-tighter">We Are Not Brokers</h3>
             <div className="space-y-6 text-white/60 font-light leading-relaxed">
-              <p>Most infrastructure companies are incentivized to push specific inventory. We don't take placement fees that bias our advice.</p>
+              <p>We do not:</p>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#f37021]">
                   <div className="w-2 h-2 bg-[#f37021]" />
-                  No Placement Fees
+                  Push inventory
                 </li>
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#f37021]">
                   <div className="w-2 h-2 bg-[#f37021]" />
-                  Zero Inventory Bias
+                  Take placement fees that bias advice
                 </li>
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#f37021]">
                   <div className="w-2 h-2 bg-[#f37021]" />
-                  Ruthless Filtering
+                  Flood inboxes with vendor decks
                 </li>
               </ul>
             </div>
@@ -46,19 +46,23 @@ const WhyInfraXPage: React.FC = () => {
             <Zap className="w-16 h-16 text-navy" />
             <h3 className="text-4xl font-black uppercase tracking-tighter text-navy">Disciplined Delivery</h3>
             <div className="space-y-6 text-slate-500 font-light leading-relaxed">
-              <p>Our job doesn't end with a shortlist. We manage risk, timelines, and accountability from initial matching through final implementation.</p>
+              <p>We do:</p>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-navy">
                   <div className="w-2 h-2 bg-navy" />
-                  Market Filtering Early
+                  Filter ruthlessly
                 </li>
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-navy">
                   <div className="w-2 h-2 bg-navy" />
-                  Reality-First Evaluation
+                  Surface reality early
                 </li>
                 <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-navy">
                   <div className="w-2 h-2 bg-navy" />
-                  Enforced Accountability
+                  Enforce disciplined evaluation
+                </li>
+                <li className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-navy">
+                  <div className="w-2 h-2 bg-navy" />
+                  Stay accountable through delivery
                 </li>
               </ul>
             </div>
