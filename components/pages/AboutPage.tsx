@@ -9,15 +9,22 @@ const AboutPage: React.FC = () => {
           {/* Header Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-end">
             <div className="space-y-6">
-              <div className="section-label">Our Heritage</div>
+            <div className="section-label">ABOUT INFrax</div>
               <h1 className="text-5xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
                 ABOUT <br /><span className="text-[#f37021]">INFRAX.</span>
               </h1>
             </div>
             <p className="text-xl md:text-2xl text-[#64748b] font-light leading-relaxed">
-              A strategic infrastructure advisory and delivery firm. We make infrastructure decisions predictable.
+              InfraX is a strategic infrastructure advisory and delivery firm. We combine AI-driven market intelligence, deep infrastructure relationships, and disciplined execution. Our job is simple: make infrastructure decisions predictable.
             </p>
           </div>
+
+          <section className="bg-slate-50 border border-navy/5 p-10 lg:p-16 space-y-6">
+            <div className="section-label">Founder's Brief</div>
+            <p className="text-lg text-slate-600 font-light leading-relaxed">
+              You are a PRINCIPAL / STAFF-PLUS mobile + platform engineer (React, Next jS, and CDN economics). Design and implement an end-to-end, production-grade “60-second video upload pipeline” for my app that:
+            </p>
+          </section>
           
           {/* Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-px bg-navy/10 border border-navy/10">

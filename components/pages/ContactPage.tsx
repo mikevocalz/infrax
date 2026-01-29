@@ -8,7 +8,7 @@ const ContactPage: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-24 space-y-6">
-            <div className="section-label">Intake Channel</div>
+            <div className="section-label">Contact</div>
             <h1 className="text-5xl md:text-9xl font-black text-navy uppercase tracking-tighter leading-none">
               REACH <br /><span className="text-[#f37021]">OUT.</span>
             </h1>

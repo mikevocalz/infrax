@@ -12,19 +12,30 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   return (
     <>
       <Hero onNavigate={onNavigate} />
+
+      <section className="bg-white border-b border-[#002b5c]/5">
+        <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="space-y-2">
+            <div className="text-xs font-black uppercase tracking-[0.4em] text-[#002b5c]">InFraX Website v1.1</div>
+            <div className="text-xs font-bold uppercase tracking-[0.3em] text-[#64748b]">1) HOME PAGE (REFINED)</div>
+            <div className="text-xs font-bold uppercase tracking-[0.3em] text-[#f37021]">Goal: Immediate clarity + authority</div>
+          </div>
+          <div className="text-xs font-bold uppercase tracking-[0.3em] text-[#f37021]">Contact</div>
+        </div>
+      </section>
       
       {/* Straight Talk Section */}
       <section className="bg-white py-24 lg:py-32 overflow-hidden border-t border-[#002b5c]/5">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-32 items-center">
             <div className="space-y-10 order-2 lg:order-1">
-              <div className="section-label">Straight Talk</div>
+              <div className="section-label">What InfraX Actually Does (Straight Talk)</div>
               <h2 className="text-4xl md:text-6xl font-black text-[#002b5c] uppercase tracking-tighter leading-none">
                 Built for Signal, <br />
                 <span className="text-[#f37021]">Not Noise.</span>
               </h2>
               <p className="text-xl text-[#64748b] font-light leading-relaxed">
-                Most infrastructure decisions fail because buyers see too much inventory and too little truth. InFraX fixes that by filtering the market before sales conversations begin.
+                Most infrastructure decisions fail because buyers see too much inventory and too little truth. InfraX fixes that by:
               </p>
               
               <div className="space-y-6 py-10 border-y border-[#002b5c]/10">
@@ -41,6 +52,9 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <p className="text-navy font-bold uppercase tracking-tight">Leading evaluation with discipline through delivery</p>
                 </div>
               </div>
+              <p className="text-sm font-bold uppercase tracking-[0.3em] text-[#002b5c]">
+                No guessing. No noise. No misalignment.
+              </p>
               
               <button 
                 onClick={() => onNavigate('platform')} 
@@ -77,7 +91,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-20 space-y-4">
             <div className="section-label">The Core Model</div>
-            <h2 className="text-4xl md:text-5xl font-black text-navy uppercase tracking-tighter">Three Pillars of InFraX</h2>
+            <h2 className="text-4xl md:text-5xl font-black text-navy uppercase tracking-tighter">Three Pillars</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-12">
             {PILLARS.map((p, i) => (
@@ -99,27 +113,30 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="max-w-4xl mx-auto bg-navy p-12 lg:p-20 text-white relative overflow-hidden">
             <div className="absolute inset-0 industrial-grid-dark opacity-10" />
             <div className="relative z-10 space-y-12">
-              <h2 className="text-4xl font-black uppercase tracking-tighter">Proof of Difference</h2>
+              <h2 className="text-4xl font-black uppercase tracking-tighter">Proof of Difference (Fast Scan)</h2>
               <div className="grid sm:grid-cols-3 gap-10">
                 <div className="space-y-2">
                   <div className="text-[#f37021] font-black text-2xl uppercase tracking-tighter">Off-Market</div>
-                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Deals others never see</p>
+                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Off-market deals others never see</p>
                 </div>
                 <div className="space-y-2">
                   <div className="text-[#f37021] font-black text-2xl uppercase tracking-tighter">AI-Driven</div>
-                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Curated shortlists, not blasts</p>
+                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">AI-driven shortlists, not vendor blasts</p>
                 </div>
                 <div className="space-y-2">
                   <div className="text-[#f37021] font-black text-2xl uppercase tracking-tighter">Governance</div>
-                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Disciplined delivery cycles</p>
+                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Delivery governance, not handoffs</p>
                 </div>
               </div>
-              <button 
-                onClick={() => onNavigate('about')}
-                className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f37021] border-b-2 border-[#f37021] pb-1 hover:text-white hover:border-white transition-all"
-              >
-                Why InFraX Is Different
-              </button>
+              <div className="space-y-2">
+                <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">CTA: Why InFraX Is Different</div>
+                <button 
+                  onClick={() => onNavigate('about')}
+                  className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f37021] border-b-2 border-[#f37021] pb-1 hover:text-white hover:border-white transition-all"
+                >
+                  Why InFraX Is Different
+                </button>
+              </div>
             </div>
           </div>
         </div>

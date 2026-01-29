@@ -9,13 +9,14 @@ const MetricsPage: React.FC = () => {
         {/* Header */}
         <div className="grid lg:grid-cols-2 gap-20 items-end max-w-6xl mx-auto">
           <div className="space-y-6">
-            <div className="section-label">Market Education</div>
+            <div className="section-label">NEW: METRICS & MARKET EDUCATION PAGE</div>
             <h1 className="text-5xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
               VITAL <br /><span className="text-[#f37021]">METRICS.</span>
             </h1>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#f37021]">Purpose: Educate buyers while quietly qualifying them.</p>
           </div>
           <p className="text-xl md:text-2xl text-[#64748b] font-light leading-relaxed">
-            Infrastructure metrics that actually matter. Informed buyers make better decisions with fewer surprises.
+            Infrastructure Metrics That Actually Matter. Informed buyers make better decisions. Better decisions lead to faster cycles, fewer surprises, and better outcomes.
           </p>
         </div>
 
@@ -45,7 +46,7 @@ const MetricsPage: React.FC = () => {
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-4xl font-black uppercase tracking-tighter">Why We Publish This</h2>
             <p className="text-xl text-white/60 font-light leading-relaxed">
-              Better decisions lead to faster cycles, fewer surprises, and better outcomes. This data separates serious operators from tire-kickers.
+              Informed buyers make better decisions. Better decisions lead to faster cycles, fewer surprises, and better outcomes. This page separates serious operators from tire-kickers.
             </p>
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-white/10">
               <div className="space-y-2">
