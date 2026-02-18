@@ -25,7 +25,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           {/* Fix mapping of TICKER_SIGNALS which are now objects with category and signal properties */}
           {[...TICKER_SIGNALS, ...TICKER_SIGNALS].map((item, i) => (
             <div key={i} className="flex items-center gap-4 text-white/80 font-mono text-[11px] uppercase tracking-wider">
-              <span className="text-orange-accent">>></span> {item.signal}
+              <span className="text-orange-accent">{">>"}</span> {item.signal}
               <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
             </div>
           ))}
