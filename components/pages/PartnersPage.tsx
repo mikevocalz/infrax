@@ -3,23 +3,37 @@ import { Building2, ArrowUpRight, Globe2, Cpu, Shield } from 'lucide-react';
 
 const PartnersPage: React.FC = () => {
   return (
-    <div className="pt-40 pb-32 bg-white selection:bg-[#f37021] selection:text-white">
-      <div className="container mx-auto px-6 space-y-32">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 max-w-6xl mx-auto">
-          <div className="max-w-3xl space-y-6">
-            <div className="section-label">Global Grid</div>
-            <h1 className="text-5xl md:text-8xl font-black text-[#002b5c] uppercase tracking-tighter leading-none">
-              Strategic <br />Alliances.
-            </h1>
+    <div className="bg-white selection:bg-[#f37021] selection:text-white">
+      {/* Hero Section */}
+      <section className="relative h-[65vh] flex items-center bg-navy overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072" 
+          className="absolute inset-0 w-full h-full object-cover opacity-30 grayscale brightness-50"
+          alt="Satellite Grid"
+        />
+        <div className="container mx-auto px-6 relative z-10 pt-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="max-w-4xl space-y-10">
+              <div className="space-y-4">
+                <div className="section-label !text-orange-accent">Global Network</div>
+                <h1 className="text-5xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none">
+                  STRATEGIC <br /><span className="text-orange-accent">ALLIANCES.</span>
+                </h1>
+              </div>
+              
+              <div className="pt-4">
+                <p className="text-xl md:text-3xl text-white/70 font-light leading-relaxed max-w-2xl">
+                  Integrating leading infrastructure and software providers to ensure seamless, end-to-end protection.
+                </p>
+              </div>
+            </div>
           </div>
-          <p className="text-xl text-[#64748b] font-light max-w-sm">
-            We integrate with the world's leading infrastructure and software providers to ensure seamless, end-to-end protection for our shared clients.
-          </p>
         </div>
+      </section>
 
+      <div className="container mx-auto px-6 py-32 space-y-32">
         {/* Global Partner Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#002b5c]/10 border border-[#002b5c]/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#002b5c]/10 border border-[#002b5c]/10 shadow-xl">
           {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
             <div key={i} className="flex flex-col items-center justify-center p-12 lg:p-20 bg-white hover:bg-[#f8fafc] transition-colors group grayscale hover:grayscale-0 relative">
               <Building2 className="w-12 h-12 text-[#64748b]/20 group-hover:text-[#002b5c] transition-colors mb-6" />
@@ -30,7 +44,7 @@ const PartnersPage: React.FC = () => {
         </div>
 
         {/* Partner Tiers */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-[#002b5c]/10 border border-[#002b5c]/10">
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-[#002b5c]/10 border border-[#002b5c]/10 shadow-2xl">
            <div className="p-12 lg:p-16 bg-white space-y-8 group">
               <Globe2 className="w-10 h-10 text-[#f37021]" />
               <h3 className="text-3xl font-black text-[#002b5c] uppercase tracking-tighter">Technology Partners</h3>
@@ -52,7 +66,7 @@ const PartnersPage: React.FC = () => {
         </section>
 
         {/* Localized CTA for Partners */}
-        <div className="bg-[#f8fafc] p-16 lg:p-24 border border-[#002b5c]/10 text-center space-y-10 relative overflow-hidden industrial-grid">
+        <div className="bg-[#f8fafc] p-16 lg:p-24 border border-[#002b5c]/10 text-center space-y-10 relative overflow-hidden industrial-grid shadow-lg">
           <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#002b5c]">Join the Network.</h2>
           <p className="text-[#64748b] max-w-xl mx-auto font-light text-lg">Partner with InfraX to deliver industrial-grade security to your global client base. Our resources are your resources.</p>
           <button className="px-16 py-6 btn-primary group flex items-center gap-4 mx-auto">

@@ -1,28 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-let aiClient: GoogleGenAI | null = null;
-
-const getClient = () => {
-  if (!apiKey) {
-    return null;
-  }
-
-  if (!aiClient) {
-    aiClient = new GoogleGenAI({ apiKey });
-  }
-
-  return aiClient;
-};
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const getSecurityInsights = async (query: string) => {
-  const client = getClient();
-  if (!client) {
-    return "Market intelligence is offline in this environment. Please contact our team for immediate assistance.";
-  }
-
   try {
-    const response = await client.models.generateContent({
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: query,
       config: {

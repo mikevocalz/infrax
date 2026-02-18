@@ -117,10 +117,10 @@ const DataMap: React.FC = () => {
                  <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Topology: Sovereign_Matrix</span>
               </div>
               <div className="space-y-1 font-mono text-[9px] text-white/30">
-                 <div>&gt; INFRA_SEC_SCAN: 100%</div>
-                 <div>&gt; MESH_FLOW: 3.4TB/S</div>
-                 <div>&gt; NODES_ACTIVE: 1,842</div>
-                 <div className="text-[#00d87d]">&gt; STATUS: OPTIMAL</div>
+                 <div>> INFRA_SEC_SCAN: 100%</div>
+                 <div>> MESH_FLOW: 3.4TB/S</div>
+                 <div>> NODES_ACTIVE: 1,842</div>
+                 <div className="text-[#00d87d]">> STATUS: OPTIMAL</div>
               </div>
            </div>
         </div>

@@ -1,81 +1,96 @@
 import React from 'react';
-import { Radio, Zap, ShieldCheck, Users } from 'lucide-react';
+import { LEADERSHIP } from '../../constants';
+import { Mail, Linkedin, User, History, ShieldCheck } from 'lucide-react';
 
 const AboutPage: React.FC = () => {
   return (
-    <div className="pt-40 bg-white">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto space-y-32">
-          {/* Header Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-end">
-            <div className="space-y-6">
-            <div className="section-label">ABOUT INFrax</div>
-              <h1 className="text-5xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
-                ABOUT <br /><span className="text-[#f37021]">INFRAX.</span>
-              </h1>
+    <div className="bg-white selection:bg-[#f37021]">
+      <section className="relative h-[60vh] flex items-center bg-navy overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069" 
+          className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale"
+          alt="Office"
+        />
+        <div className="container mx-auto px-6 relative z-10 pt-20">
+          <div className="max-w-4xl space-y-8">
+            <div className="flex items-center gap-4">
+              <span className="w-12 h-px bg-orange-accent"></span>
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-orange-accent">Founding Principles</span>
             </div>
-            <p className="text-xl md:text-2xl text-[#64748b] font-light leading-relaxed">
-              InfraX is a strategic infrastructure advisory and delivery firm. We combine AI-driven market intelligence, deep infrastructure relationships, and disciplined execution. Our job is simple: make infrastructure decisions predictable.
-            </p>
-          </div>
-
-          <section className="bg-slate-50 border border-navy/5 p-10 lg:p-16 space-y-6">
-            <div className="section-label">Founder's Brief</div>
-            <p className="text-lg text-slate-600 font-light leading-relaxed">
-              You are a PRINCIPAL / STAFF-PLUS mobile + platform engineer (React, Next jS, and CDN economics). Design and implement an end-to-end, production-grade “60-second video upload pipeline” for my app that:
-            </p>
-          </section>
-          
-          {/* Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-px bg-navy/10 border border-navy/10">
-             <div className="lg:col-span-7 bg-white p-12 lg:p-20 space-y-10">
-                <div className="section-label">The InFraX Standard</div>
-                <h4 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-navy leading-none">AI-Driven Intelligence <br />Disciplined Execution.</h4>
-                <div className="space-y-6 text-lg text-slate-500 font-light leading-relaxed">
-                  <p>
-                    InFraX is built on a simple premise: infrastructure buyers deserve truth, not just inventory. We combine proprietary off-market intelligence with deep industry relationships to solve the fragmentation of the provider landscape.
-                  </p>
-                  <p>
-                    We are not brokers. We do not push inventory or take fees that bias our advice. Instead, we enforce disciplined evaluation and stay accountable through the entire delivery lifecycle.
-                  </p>
-                </div>
-                <button className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.3em] text-navy border-b-2 border-navy pb-1 hover:text-[#f37021] hover:border-[#f37021] transition-all">
-                  Connect With Our Team
-                </button>
-             </div>
-             <div className="lg:col-span-5 grid grid-cols-1 gap-px">
-                <div className="p-16 bg-navy text-white h-full flex flex-col justify-between">
-                  <Zap className="w-12 h-12 text-[#f37021] mb-8" />
-                  <div>
-                    <div className="text-3xl font-black uppercase tracking-tighter mb-2">Predictable</div>
-                    <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest">Decision Modeling</div>
-                  </div>
-                </div>
-                <div className="p-16 bg-[#f37021] text-white h-full flex flex-col justify-between">
-                  <ShieldCheck className="w-12 h-12 text-white mb-8" />
-                  <div>
-                    <div className="text-3xl font-black uppercase tracking-tighter mb-2">Vendor Neutral</div>
-                    <div className="text-[10px] text-white/60 font-bold uppercase tracking-widest">Zero Placement Bias</div>
-                  </div>
-                </div>
-             </div>
-          </div>
-
-          {/* Core Values / Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 py-32 border-t border-navy/5">
-             {[
-               { val: "Signal", label: "Intelligence Focus" },
-               { val: "Agnostic", label: "Market Advice" },
-               { val: "Enforced", label: "SLA Accountability" },
-               { val: "Direct", label: "Specialist Access" }
-             ].map(stat => (
-               <div key={stat.label} className="space-y-2">
-                 <div className="text-5xl font-black text-navy tracking-tighter uppercase">{stat.val}</div>
-                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</div>
-               </div>
-             ))}
+            <h1 
+              className="text-white font-black uppercase tracking-tighter leading-none"
+              style={{ fontSize: 'clamp(3rem, 12vw, 8rem)' }}
+            >
+              INFRAX <br /><span className="text-orange-accent">LEADERSHIP.</span>
+            </h1>
           </div>
         </div>
+      </section>
+
+      <div className="container mx-auto px-6 py-24 lg:py-40 space-y-32">
+        {/* Leadership Grid */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+           {LEADERSHIP.map((leader, i) => (
+             <div key={i} className="relative bg-[#f8fafc] p-8 lg:p-16 border border-navy/5 flex flex-col group transition-all hover:shadow-2xl hover:-translate-y-1">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-10">
+                  <div className="w-20 h-20 bg-navy flex items-center justify-center text-orange-accent flex-shrink-0">
+                    <User size={40} />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-navy uppercase tracking-tight leading-none mb-2">{leader.name}</h3>
+                    <div className="text-[10px] font-bold text-orange-accent uppercase tracking-[0.2em]">{leader.role}</div>
+                  </div>
+                </div>
+                <p className="text-lg text-slate-500 font-light leading-relaxed mb-10 flex-1">{leader.bio}</p>
+                <div className="flex flex-wrap gap-2 mb-10">
+                  {leader.expertise.map(exp => (
+                    <span key={exp} className="px-3 py-1.5 bg-navy text-white text-[9px] font-bold uppercase tracking-widest">{exp}</span>
+                  ))}
+                </div>
+                <div className="pt-8 border-t border-navy/10 flex gap-6">
+                  <button className="text-navy hover:text-orange-accent transition-colors"><Linkedin size={20} /></button>
+                  <button className="text-navy hover:text-orange-accent transition-colors"><Mail size={20} /></button>
+                </div>
+             </div>
+           ))}
+        </div>
+
+        {/* Heritage Section - Centered content with left-aligned text */}
+        <section className="relative p-8 sm:p-12 lg:p-24 bg-slate-50 overflow-hidden border border-navy/5 shadow-2xl">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475" className="absolute inset-0 w-full h-full object-cover opacity-5 grayscale" alt="" />
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
+            <div className="space-y-8">
+               <div className="section-label">Our Heritage</div>
+               <h2 className="text-4xl md:text-7xl font-black text-navy uppercase tracking-tighter leading-none">Strategy <br />& Execution.</h2>
+               <p className="text-lg sm:text-xl text-slate-500 font-light leading-relaxed max-w-xl">
+                 InfraX is built on truth, not inventory. We combine proprietary intelligence with relationships to solve the fragmentation of the global grid.
+               </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+              {[
+                { val: "Signal", label: "Intelligence Focus" },
+                { val: "Agnostic", label: "Market Advice" },
+                { val: "Enforced", label: "SLA Accountability" },
+                { val: "Direct", label: "Specialist Access" }
+              ].map(stat => (
+               <div key={stat.label} className="flex flex-col items-center justify-center p-10 bg-white border border-navy/10 aspect-square shadow-xl group hover:bg-navy transition-all duration-300 overflow-hidden">
+                 <div className="text-left w-full max-w-fit mx-auto">
+                    <div 
+                      className="font-black text-navy group-hover:text-orange-accent tracking-tighter uppercase transition-colors duration-300 leading-none mb-3"
+                      style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
+                    >
+                      {stat.val}
+                    </div>
+                    <div className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] group-hover:text-white/70 transition-colors duration-300 leading-tight">
+                      {stat.label}
+                    </div>
+                 </div>
+               </div>
+             ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

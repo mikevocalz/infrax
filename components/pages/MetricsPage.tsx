@@ -4,63 +4,71 @@ import { CheckCircle2 } from 'lucide-react';
 
 const MetricsPage: React.FC = () => {
   return (
-    <div className="pt-40 bg-white selection:bg-[#f37021]">
-      <div className="container mx-auto px-6 space-y-32 mb-32">
-        {/* Header */}
-        <div className="grid lg:grid-cols-2 gap-20 items-end max-w-6xl mx-auto">
-          <div className="space-y-6">
-            <div className="section-label">NEW: METRICS & MARKET EDUCATION PAGE</div>
-            <h1 className="text-5xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
+    <div className="bg-white selection:bg-[#f37021]">
+      <section className="relative h-[50vh] flex items-center bg-[#000d1a] overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070" 
+          className="absolute inset-0 w-full h-full object-cover opacity-30 grayscale"
+          alt="Analytics Grid"
+        />
+        <div className="container mx-auto px-6 relative z-10 pt-20">
+          <div className="max-w-4xl space-y-6">
+            <div className="section-label !text-[#f37021]">Education & Data</div>
+            <h1 className="text-5xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none">
               VITAL <br /><span className="text-[#f37021]">METRICS.</span>
             </h1>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#f37021]">Purpose: Educate buyers while quietly qualifying them.</p>
           </div>
-          <p className="text-xl md:text-2xl text-[#64748b] font-light leading-relaxed">
-            Infrastructure Metrics That Actually Matter. Informed buyers make better decisions. Better decisions lead to faster cycles, fewer surprises, and better outcomes.
-          </p>
         </div>
+      </section>
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className="container mx-auto px-6 py-32 space-y-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#000d1a]/10 border border-[#000d1a]/10 shadow-2xl">
           {METRICS.map((m, i) => (
-            <div key={i} className="p-12 border border-navy/5 bg-slate-50 group hover:bg-navy hover:text-white transition-all duration-500 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <CheckCircle2 className="w-32 h-32" />
+            <div key={i} className="relative p-12 sm:p-16 bg-white group hover:bg-[#000d1a] transition-all duration-300 overflow-hidden flex flex-col items-center justify-center min-h-[500px]">
+              <div className="absolute top-0 right-0 p-8 sm:p-12 opacity-5 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none">
+                <CheckCircle2 size={160} className="text-[#000d1a] group-hover:text-white" />
               </div>
-              <h3 className="text-3xl font-black uppercase tracking-tighter mb-4">{m.category}</h3>
-              <p className="text-slate-500 group-hover:text-white/60 mb-8 font-light">{m.description}</p>
-              <ul className="space-y-4">
-                {m.items.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-4 text-xs font-black uppercase tracking-widest">
-                    <div className="w-1.5 h-1.5 bg-[#f37021]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <div className="relative z-10 w-full max-w-md text-left">
+                <h3 
+                  className="font-black uppercase tracking-tighter mb-6 text-[#000d1a] group-hover:text-[#f37021] transition-colors duration-300 leading-tight"
+                  style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)' }}
+                >
+                  {m.category}
+                </h3>
+                <p className="text-slate-500 group-hover:text-white/90 mb-10 font-light text-lg leading-relaxed transition-colors duration-300">
+                  {m.description}
+                </p>
+                <div className="space-y-5">
+                  {m.items.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-4 text-xs font-black uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors duration-300">
+                      <div className="w-1.5 h-1.5 bg-[#f37021] mt-1 flex-shrink-0" />
+                      <span className="leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Why We Publish This */}
-        <section className="bg-navy text-white p-16 lg:p-24 text-center space-y-10 industrial-grid-dark">
-          <div className="max-w-3xl mx-auto space-y-8">
-            <h2 className="text-4xl font-black uppercase tracking-tighter">Why We Publish This</h2>
+        <section className="bg-[#000d1a] p-12 lg:p-32 text-center space-y-12 shadow-2xl relative overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51" className="absolute inset-0 w-full h-full object-cover opacity-10 grayscale" alt="" />
+          <div className="max-w-4xl mx-auto space-y-8 relative z-10">
+            <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter text-white">Why Metrics Matter</h2>
             <p className="text-xl text-white/60 font-light leading-relaxed">
-              Informed buyers make better decisions. Better decisions lead to faster cycles, fewer surprises, and better outcomes. This page separates serious operators from tire-kickers.
+              Better decisions lead to faster cycles, fewer surprises, and better outcomes. This data separates serious operators from tire-kickers.
             </p>
-            <div className="grid grid-cols-3 gap-8 pt-10 border-t border-white/10">
-              <div className="space-y-2">
-                <div className="text-3xl font-black text-[#f37021]">Faster</div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">Evaluation Cycles</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-black text-[#f37021]">Fewer</div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">Surprises</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-black text-[#f37021]">Better</div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">Outcomes</div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-16 border-t border-white/10">
+              {[
+                { label: "Evaluation Cycles", val: "Faster", color: "orange" },
+                { label: "Surprises", val: "Fewer", color: "white" },
+                { label: "Outcomes", val: "Better", color: "orange" }
+              ].map(stat => (
+                <div key={stat.label} className="space-y-2">
+                  <div className={`text-5xl font-black ${stat.color === 'orange' ? 'text-[#f37021]' : 'text-white'}`}>{stat.val}</div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
