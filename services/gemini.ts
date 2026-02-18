@@ -1,11 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_API_KEY;
+
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export const getSecurityInsights = async (query: string) => {
+  if (!ai) {
+    console.warn("Gemini API key missing. Set VITE_GEMINI_API_KEY in your .env.local file.");
+    return "Market intelligence is temporarily offline because the API key is not configured. Please contact our team directly for immediate assistance.";
+  }
+
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.5-flash',
       contents: query,
       config: {
         systemInstruction: `You are the InFraX Strategic Infrastructure Advisor. Your goal is to provide expert advice on data centers, power, cloud, equipment, and connectivity. 
