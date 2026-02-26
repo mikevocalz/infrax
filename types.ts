@@ -25,3 +25,20 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
+
+export interface Asset {
+  id: string;
+  name: string;
+  type: string;
+  provider: string;
+  capacity_mw: number;
+  status: string;
+  location: string;
+}
+
+export interface MarketSignal {
+  id: string;
+  category: string;
+  text: string;
+  severity: 'High' | 'Medium' | 'Low';
+}

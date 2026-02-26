@@ -19,7 +19,7 @@ const ContactPage: React.FC = () => {
             <div className="lg:col-span-7 bg-white p-12 lg:p-24">
               <div className="flex items-center gap-4 mb-12">
                 <ShieldCheck className="text-orange-accent w-8 h-8" />
-                <h3 className="text-3xl font-black text-navy uppercase tracking-tighter">Initiate Audit</h3>
+                <h3 className="text-3xl font-black text-navy uppercase tracking-tighter">Request Infrastructure Audit</h3>
               </div>
               
               <form className="space-y-10" onSubmit={(e) => e.preventDefault()}>
@@ -34,20 +34,20 @@ const ContactPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Solution Pillar</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Requirement Pillar</label>
                   <select className="w-full border-b border-navy/10 focus:border-orange-accent bg-transparent py-3 outline-none transition-all font-light appearance-none text-navy">
-                    <option>HPC / AI Architecture Blueprinting</option>
-                    <option>Utility & Power Governance Audit</option>
-                    <option>Global Edge Mesh Topology Review</option>
-                    <option>Independent SLA Verification</option>
+                    <option>InfraAlign™ Modeling Engagement</option>
+                    <option>Investor Feasibility Audit</option>
+                    <option>Enterprise Deployment Modeling</option>
+                    <option>Strategic Infrastructure Mandate</option>
                   </select>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Operational Constraints</label>
-                  <textarea rows={4} className="w-full border-b border-navy/10 focus:border-orange-accent bg-transparent py-3 outline-none transition-all font-light resize-none placeholder:text-slate-300" placeholder="MW requirements, Latency thresholds, Regional focus..." />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Deployment Parameters</label>
+                  <textarea rows={4} className="w-full border-b border-navy/10 focus:border-orange-accent bg-transparent py-3 outline-none transition-all font-light resize-none placeholder:text-slate-300" placeholder="MW requirements, Geographic preference, Cooling architecture..." />
                 </div>
                 <button className="px-16 py-6 btn-primary w-full md:w-auto flex items-center justify-center gap-4">
-                  Request Technical Review
+                  Initiate Technical Review
                   <Send className="w-4 h-4" />
                 </button>
               </form>

@@ -1,81 +1,266 @@
-import React from 'react';
-import { Cpu, Activity, Database, Network, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Cpu, Zap, Shield, BarChart3, Target, Layers, Network, Database, ChevronRight, ArrowRight, Gauge, Activity } from 'lucide-react';
 
 const PlatformPage: React.FC = () => {
   return (
-    <div className="bg-white selection:bg-orange-accent">
-      <section className="relative h-[70vh] flex items-center bg-navy overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1591453089816-0fbb971b454c?q=80&w=2070" 
-          className="absolute inset-0 w-full h-full object-cover opacity-30 grayscale contrast-150 brightness-75"
-          alt="AI Processors"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-navy/90 via-navy/40 to-navy" />
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-6xl mx-auto text-center space-y-8">
-            <div className="section-label !text-orange-accent">Infrastructure OS</div>
-            <h1 className="text-6xl md:text-[10rem] font-black text-white uppercase tracking-tighter leading-[0.8]">
-              INFRA<span className="text-orange-accent">ALIGN™</span>
-            </h1>
-            <p className="text-xl md:text-3xl text-white/60 font-light max-w-3xl mx-auto">
-              Mapping the global grid with engineering precision.
-            </p>
+    <div className="pt-32 pb-24">
+      {/* HERO */}
+      <section className="container mx-auto px-6 mb-16 md:mb-24">
+        <div className="max-w-4xl space-y-6 md:space-y-8">
+          <div className="section-label">InfraAlign™</div>
+          <h1 className="text-4xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
+            The Infrastructure <br />
+            <span className="text-orange-accent">Alignment Engine.</span>
+          </h1>
+          <p className="text-lg md:text-2xl text-slate-500 font-light leading-relaxed max-w-2xl">
+            Physics-first modeling for power-constrained markets.
+          </p>
+        </div>
+      </section>
+
+      {/* DASHBOARD PREVIEW / VISUAL */}
+      <section className="container mx-auto px-6 mb-32">
+        <div className="bg-navy p-4 rounded-t-xl border-x border-t border-white/10 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-red-500" />
+            <div className="w-3 h-3 rounded-full bg-yellow-500" />
+            <div className="w-3 h-3 rounded-full bg-green-500" />
+            <div className="ml-4 text-[10px] font-mono text-white/40 uppercase tracking-widest">InfraAlign™ v1.0 // Active Modeling Environment</div>
+          </div>
+          <div className="text-[10px] font-mono text-orange-accent uppercase tracking-widest flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-orange-accent animate-pulse" />
+            Live Grid Telemetry
+          </div>
+        </div>
+        <div className="border border-navy/10 shadow-2xl overflow-hidden bg-slate-50 grid lg:grid-cols-12 min-h-[600px]">
+          {/* Sidebar */}
+          <div className="lg:col-span-3 border-r border-slate-200 p-8 space-y-8 bg-white">
+            <div className="space-y-4">
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Scenario</div>
+              <div className="p-4 bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <span className="text-xs font-bold text-navy">NO_VA_HYPERSCALE_01</span>
+                <ChevronRight size={14} className="text-slate-400" />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Constraint Weights</div>
+              <div className="space-y-3">
+                {[
+                  { label: "Power Deliverability", val: 40 },
+                  { label: "Interconnect Timeline", val: 20 },
+                  { label: "Cooling Feasibility", val: 15 },
+                  { label: "Cost per kW", val: 15 },
+                  { label: "Expansion Viability", val: 10 }
+                ].map((item, i) => (
+                  <div key={i} className="space-y-1">
+                    <div className="flex justify-between text-[9px] font-bold uppercase tracking-tight">
+                      <span>{item.label}</span>
+                      <span>{item.val}%</span>
+                    </div>
+                    <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-navy" style={{ width: `${item.val}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-9 p-12 space-y-12">
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="p-8 bg-white border border-slate-200 shadow-sm space-y-4">
+                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Feasibility Score</div>
+                <div className="text-5xl font-black text-navy">84.2</div>
+                <div className="text-[9px] font-bold text-[#00d87d] uppercase tracking-widest">Optimal Alignment</div>
+              </div>
+              <div className="p-8 bg-white border border-slate-200 shadow-sm space-y-4">
+                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Time to Power</div>
+                <div className="text-5xl font-black text-navy">18m</div>
+                <div className="text-[9px] font-bold text-orange-accent uppercase tracking-widest">Grid Constrained</div>
+              </div>
+              <div className="p-8 bg-white border border-slate-200 shadow-sm space-y-4">
+                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">CapEx Band</div>
+                <div className="text-5xl font-black text-navy">$14k</div>
+                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Per kW / Tier III</div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Regional Shortlist</div>
+              <div className="space-y-4">
+                {[
+                  { region: "Loudoun County, VA", score: 84.2, status: "Optimal", color: "bg-[#00d87d]" },
+                  { region: "Columbus, OH", score: 76.5, status: "Viable", color: "bg-blue-500" },
+                  { region: "Dallas, TX", score: 62.1, status: "Risk High", color: "bg-orange-accent" }
+                ].map((item, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-200 flex items-center justify-between group hover:border-navy transition-colors">
+                    <div className="flex items-center gap-6">
+                      <div className={`w-2 h-12 ${item.color}`} />
+                      <div>
+                        <div className="text-sm font-black text-navy uppercase tracking-tight">{item.region}</div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.status}</div>
+                      </div>
+                    </div>
+                    <div className="text-2xl font-black text-navy">{item.score}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-6 py-32 space-y-32">
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-navy/10 border border-navy/10 shadow-2xl">
-          {[
-            { step: "01", title: "Data Ingestion", desc: "Aggregating utility metrics and fiber path density.", icon: <Database />, img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8" },
-            { step: "02", title: "Thermal Modeling", desc: "Analyzing power-density and cooling caps.", icon: <Cpu />, img: "https://images.unsplash.com/photo-1518770660439-4636190af475" },
-            { step: "03", title: "Mesh Validation", desc: "Agnostic verification of provider claims.", icon: <Network />, img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa" },
-            { step: "04", title: "SLA Governance", desc: "Post-deployment operational health monitoring.", icon: <ShieldCheck />, img: "https://images.unsplash.com/photo-1563986768609-322da13575f3" },
-          ].map((item, i) => (
-            <div key={i} className="group relative h-96 overflow-hidden">
-              <img src={item.img} className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-40 transition-opacity duration-1000 grayscale brightness-50" />
-              <div className="relative z-10 p-12 h-full flex flex-col justify-between bg-white group-hover:bg-navy/80 transition-colors duration-500">
-                <div>
-                  <div className="text-[10px] font-mono text-orange-accent mb-6">MODULE_{item.step}</div>
-                  <div className="w-10 h-10 text-navy group-hover:text-white mb-6">
-                    {React.cloneElement(item.icon as React.ReactElement<any>, { size: 28 })}
-                  </div>
-                  <h3 className="text-xl font-black uppercase tracking-tight text-navy group-hover:text-white mb-4">{item.title}</h3>
-                  <p className="text-slate-500 group-hover:text-white/60 text-sm font-light leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
+      {/* WHAT IT DOES */}
+      <section className="py-24 bg-slate-50 border-y border-slate-200">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="space-y-10">
+              <div className="section-label">Capabilities</div>
+              <h2 className="text-4xl md:text-6xl font-black text-navy uppercase tracking-tighter leading-none">
+                Modeled Across <br /><span className="text-orange-accent">Real Constraints.</span>
+              </h2>
+              <p className="text-xl text-slate-500 font-light leading-relaxed">
+                InfraAlign™ ingests deployment requirements and models real-world constraints across the entire infrastructure stack. Every output is feasibility-ranked before capital deployment.
+              </p>
             </div>
-          ))}
-        </section>
-
-        <section className="bg-navy p-12 lg:p-24 relative overflow-hidden text-white shadow-2xl">
-          <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51" className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale brightness-50" />
-          <div className="grid lg:grid-cols-2 gap-20 items-center relative z-10">
-            <div className="space-y-12">
-              <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none">Physics-First <br />Simulations.</h2>
-              <p className="text-xl text-white/60 font-light leading-relaxed">We model the physics of your deployment—power, heat, and light—before a single contract is signed.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div className="p-8 border border-white/10 bg-white/5 backdrop-blur-md">
-                  <div className="text-orange-accent font-black text-2xl uppercase tracking-tighter">MW Modeling</div>
-                  <p className="text-white/40 text-[10px] mt-2 uppercase tracking-widest font-bold">Real-time utility capacity telemetry</p>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {[
+                "Utility interconnection queues",
+                "Substation headroom",
+                "Transformer lead times",
+                "Cooling density thresholds",
+                "Fiber route diversity",
+                "Regional cost per kW bands",
+                "Off-market site opportunities"
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 p-6 bg-white border border-slate-200">
+                  <div className="w-1.5 h-1.5 bg-orange-accent" />
+                  <span className="font-bold text-navy uppercase tracking-widest text-[10px]">{item}</span>
                 </div>
-                <div className="p-8 border border-white/10 bg-white/5 backdrop-blur-md">
-                  <div className="text-orange-accent font-black text-2xl uppercase tracking-tighter">Path Audits</div>
-                  <p className="text-white/40 text-[10px] mt-2 uppercase tracking-widest font-bold">Independent fiber diversity mapping</p>
-                </div>
-              </div>
-            </div>
-            <div className="relative aspect-video bg-black/40 border border-white/10 overflow-hidden group">
-               <img src="https://images.unsplash.com/photo-1518770660439-4636190af475" className="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000" />
-               <div className="absolute inset-0 flex items-center justify-center">
-                 <div className="w-24 h-24 border border-orange-accent/30 rounded-full flex items-center justify-center animate-pulse">
-                   <Activity className="w-12 h-12 text-orange-accent" />
-                 </div>
-               </div>
+              ))}
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="py-24 lg:py-40">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-4xl mx-auto mb-24 space-y-6">
+            <div className="section-label mx-auto">The Process</div>
+            <h2 className="text-4xl md:text-7xl font-black text-navy uppercase tracking-tighter leading-none">
+              From Requirements <br />To <span className="text-orange-accent">Intelligence.</span>
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-12">
+            {[
+              {
+                step: "01",
+                title: "Input Layer",
+                desc: "Deployment requirements are structured into MW demand, geography, cooling architecture, and capital envelope.",
+                items: ["MW / GW Demand", "Geographic Preference", "Cooling Architecture", "Capital Envelope"]
+              },
+              {
+                step: "02",
+                title: "Constraint Modeling",
+                desc: "InfraAlign™ simulates utility deliverability risk, interconnection timelines, and regional grid bottlenecks.",
+                items: ["Utility Deliverability", "Interconnect Timelines", "Grid Bottlenecks", "Thermal Limitations"]
+              },
+              {
+                step: "03",
+                title: "Output Intelligence",
+                desc: "Clients receive a feasibility score, ranked regional shortlist, and a risk-adjusted expansion roadmap.",
+                items: ["Feasibility Score", "Ranked Shortlist", "Time-to-Power", "Risk Heat Map"]
+              }
+            ].map((item, i) => (
+              <div key={i} className="space-y-8 p-12 bg-slate-50 border border-slate-200 relative overflow-hidden group hover:border-orange-accent transition-all">
+                <div className="text-8xl font-black text-navy/5 absolute -top-4 -right-4">{item.step}</div>
+                <h3 className="text-2xl font-black text-navy uppercase tracking-tight relative z-10">{item.title}</h3>
+                <p className="text-slate-500 font-light leading-relaxed relative z-10">{item.desc}</p>
+                <ul className="space-y-3 relative z-10">
+                  {item.items.map((li, j) => (
+                    <li key={j} className="flex items-center gap-3 text-[10px] font-bold text-navy uppercase tracking-widest">
+                      <div className="w-1 h-1 bg-orange-accent" />
+                      {li}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHY IT MATTERS */}
+      <section className="py-24 bg-navy text-white text-center">
+        <div className="container mx-auto px-6 max-w-4xl space-y-12">
+          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+            Infrastructure is no longer land-first. <br />
+            <span className="text-orange-accent">It is power-first.</span>
+          </h2>
+          <p className="text-xl text-white/60 font-light leading-relaxed">
+            InfraAlign™ reduces capital exposure by validating deliverable megawatts before acquisition, underwriting, or construction begins.
+          </p>
+        </div>
+      </section>
+
+      {/* ACCESS MODEL */}
+      <section className="py-24 lg:py-40">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="space-y-10">
+              <div className="section-label">Access Model</div>
+              <h2 className="text-4xl md:text-6xl font-black text-navy uppercase tracking-tighter leading-none">
+                Deployed Through <br /><span className="text-orange-accent">Strategic Mandates.</span>
+              </h2>
+              <p className="text-xl text-slate-500 font-light leading-relaxed">
+                InfraAlign™ is not a standalone tool. It is the intelligence layer delivered through our structured engagements.
+              </p>
+              <div className="grid gap-4">
+                {[
+                  "Structured advisory engagements",
+                  "Investor feasibility audits",
+                  "Enterprise deployment modeling",
+                  "Strategic infrastructure mandates"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 p-6 bg-slate-50 border border-slate-200">
+                    <div className="w-1.5 h-1.5 bg-orange-accent" />
+                    <span className="font-bold text-navy uppercase tracking-widest text-xs">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <button className="px-12 py-6 bg-navy text-white font-black uppercase tracking-widest hover:bg-orange-accent transition-all">
+                Initiate Technical Review
+              </button>
+            </div>
+            <div className="relative">
+              <div className="aspect-square bg-slate-100 p-12 flex items-center justify-center">
+                <div className="relative w-full h-full border-2 border-dashed border-navy/10 rounded-full flex items-center justify-center animate-[spin_60s_linear_infinite]">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white border border-navy shadow-xl flex items-center justify-center">
+                    <Zap size={24} className="text-orange-accent" />
+                  </div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-16 h-16 bg-white border border-navy shadow-xl flex items-center justify-center">
+                    <Shield size={24} className="text-navy" />
+                  </div>
+                  <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white border border-navy shadow-xl flex items-center justify-center">
+                    <Target size={24} className="text-navy" />
+                  </div>
+                  <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white border border-navy shadow-xl flex items-center justify-center">
+                    <BarChart3 size={24} className="text-navy" />
+                  </div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-3xl font-black text-navy uppercase tracking-tighter text-center">
+                    INFRA<br /><span className="text-orange-accent">ALIGN™</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

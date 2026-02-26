@@ -10,6 +10,8 @@ import ServicesPage from './components/pages/ServicesPage';
 import AboutPage from './components/pages/AboutPage';
 import PartnersPage from './components/pages/PartnersPage';
 import ContactPage from './components/pages/ContactPage';
+import ExecutionPage from './components/pages/ExecutionPage';
+import CapitalPage from './components/pages/CapitalPage';
 import { SERVICES } from './constants';
 import { Mail, Phone, Twitter, Linkedin, Facebook } from 'lucide-react';
 
@@ -36,6 +38,10 @@ const App: React.FC = () => {
         return <ServicesPage />;
       case 'about':
         return <AboutPage />;
+      case 'execution':
+        return <ExecutionPage />;
+      case 'capital':
+        return <CapitalPage />;
       case 'partners':
         return <PartnersPage />;
       case 'contact':
@@ -91,7 +97,7 @@ const App: React.FC = () => {
                 InFra<span className="text-[#f37021]">X</span>
               </div>
               <p className="text-white/50 text-sm leading-relaxed font-light max-w-xs">
-                Strategic infrastructure advisory and delivery. Built for signal, not noise. Enforcing disciplined evaluation through implementation.
+                The intelligence layer for AI-scale infrastructure deployment. Aligning power, land, capital, and operators before capital is exposed.
               </p>
               <div className="flex gap-6">
                 <Twitter className="w-5 h-5 text-white/40 hover:text-[#f37021] cursor-pointer transition-colors" />
@@ -101,24 +107,25 @@ const App: React.FC = () => {
             </div>
             
             <div>
-              <h5 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Infrastructure</h5>
+              <h5 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Platform</h5>
               <ul className="space-y-4 text-white/40 text-[11px] font-bold uppercase tracking-[0.2em]">
-                {SERVICES.map(s => (
-                  <li key={s.id} onClick={() => setCurrentPath('services')} className="hover:text-white cursor-pointer transition-colors flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 bg-white/10" />
-                    {s.title}
-                  </li>
-                ))}
+                <li onClick={() => setCurrentPath('platform')} className="hover:text-white cursor-pointer transition-colors flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 bg-white/10" />
+                  InfraAlign™ Engine
+                </li>
+                <li onClick={() => setCurrentPath('intelligence')} className="hover:text-white cursor-pointer transition-colors flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 bg-white/10" />
+                  Market Intelligence
+                </li>
               </ul>
             </div>
 
             <div>
-              <h5 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Resources</h5>
+              <h5 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Services</h5>
               <ul className="space-y-4 text-white/40 text-[11px] font-bold uppercase tracking-[0.2em]">
-                <li onClick={() => setCurrentPath('platform')} className="hover:text-white cursor-pointer transition-colors">InfraAlign™ Platform</li>
-                <li onClick={() => setCurrentPath('intelligence')} className="hover:text-white cursor-pointer transition-colors">Market Intelligence</li>
-                <li onClick={() => setCurrentPath('metrics')} className="hover:text-white cursor-pointer transition-colors">Education Metrics</li>
-                <li onClick={() => setCurrentPath('why-infrax')} className="hover:text-white cursor-pointer transition-colors">Why InFraX</li>
+                <li onClick={() => setCurrentPath('execution')} className="hover:text-white cursor-pointer transition-colors">Execution Discipline</li>
+                <li onClick={() => setCurrentPath('capital')} className="hover:text-white cursor-pointer transition-colors">Capital Validation</li>
+                <li onClick={() => setCurrentPath('about')} className="hover:text-white cursor-pointer transition-colors">Leadership</li>
               </ul>
             </div>
 

@@ -87,10 +87,16 @@ const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
             ))}
             <div className={`h-6 w-px ${showSolidHeader ? 'bg-navy/10' : 'bg-white/20'}`} />
             <button 
+              onClick={() => handleNavClick('platform')}
+              className={`px-6 py-2.5 border border-orange-accent text-orange-accent hover:bg-orange-accent hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest rounded-none ${showSolidHeader ? 'border-navy/20 text-navy hover:border-orange-accent' : ''}`}
+            >
+              Explore InfraAlign™
+            </button>
+            <button 
               onClick={() => handleNavClick('contact')}
               className="px-6 py-2.5 bg-orange-accent text-white hover:bg-[#d95d12] transition-all text-[10px] font-bold uppercase tracking-widest rounded-none shadow-lg shadow-orange-500/20"
             >
-              Request Audit
+              Request Infrastructure Audit
             </button>
           </nav>
 
@@ -140,7 +146,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
               onClick={() => handleNavClick('contact')}
               className="w-full py-6 bg-orange-accent text-white rounded-none font-black text-xl uppercase tracking-widest text-center shadow-2xl shadow-orange-500/30 active:scale-95 transition-transform"
             >
-              Request Strategic Audit
+              Request Infrastructure Audit
             </button>
             
             <div className="grid grid-cols-2 gap-4">

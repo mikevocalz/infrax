@@ -3,11 +3,11 @@ import { ShieldCheck, Cpu, Workflow, Layers, Network, Database, AlertCircle, Zap
 import { NavItem, Service } from './types';
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Strategy', href: 'home' },
-  { label: 'Solutions', href: 'services' },
-  { label: 'InfraAlign™ OS', href: 'platform' },
-  { label: 'Market Intel', href: 'intelligence' },
-  { label: 'Governance', href: 'metrics' },
+  { label: 'Home', href: 'home' },
+  { label: 'InfraAlign™', href: 'platform' },
+  { label: 'Intelligence', href: 'intelligence' },
+  { label: 'Execution', href: 'execution' },
+  { label: 'Capital', href: 'capital' },
   { label: 'Leadership', href: 'about' },
   { label: 'Contact', href: 'contact' },
 ];
@@ -113,15 +113,15 @@ export const METRICS = [
 
 export const LEADERSHIP = [
   {
+    name: "Kirk “Hurricane” Horton",
+    role: "Founder | Data Center Strategy & Development",
+    bio: "A 30-year executive leader with deep experience in data center development and infrastructure commercialization. Kirk brings operational realism to infrastructure expansion.",
+    expertise: ["Site Selection", "Capacity Planning", "Deal Mapping"]
+  },
+  {
     name: "Asim Cambrelen",
     role: "Co-Founder | Strategy & Infrastructure Advisory",
     bio: "Asim brings over 20 years of executive experience in enterprise technology strategy and public sector advisory. He works at the intersection of infrastructure economics, AI governance, and board-level decision advisory.",
     expertise: ["AI Governance", "Infrastructure Economics", "Regulatory Strategy"]
-  },
-  {
-    name: "Kirk “Hurricane” Horton",
-    role: "Co-Founder | Data Center Strategy & Development",
-    bio: "A 30-year executive leader with deep experience in data center development and infrastructure commercialization. Kirk brings operational realism to infrastructure expansion.",
-    expertise: ["Site Selection", "Capacity Planning", "Deal Mapping"]
   }
 ];

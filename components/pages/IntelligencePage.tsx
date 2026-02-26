@@ -1,106 +1,185 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { AlertCircle, TrendingUp, Zap, Globe, Search, Filter, ArrowUpRight, Clock, ShieldCheck, Database } from 'lucide-react';
 import { TICKER_SIGNALS } from '../../constants';
-import { AlertTriangle, TrendingUp, Info, Zap } from 'lucide-react';
+import { MarketSignal } from '../../types';
 
 const IntelligencePage: React.FC = () => {
+  const [signals, setSignals] = useState<MarketSignal[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSignals = async () => {
+      try {
+        const response = await fetch('/api/v1/intel/signals');
+        const data = await response.json();
+        setSignals(data);
+      } catch (error) {
+        console.error('Error fetching signals:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSignals();
+  }, []);
+
   return (
-    <div className="bg-navy text-white min-h-screen selection:bg-[#f37021]">
-      {/* Hero Header */}
-      <section className="relative h-[50vh] flex items-center bg-navy overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072" 
-          className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale brightness-50"
-          alt="Satellite Data"
-        />
-        <div className="container mx-auto px-6 relative z-10 pt-20">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 max-w-6xl">
-            <div className="max-w-3xl space-y-6">
-              <div className="section-label !text-[#f37021]">Operational Telemetry</div>
-              <h1 className="text-5xl md:text-9xl font-black uppercase tracking-tighter leading-none">
-                Live <br />Signals.
-              </h1>
+    <div className="pt-32 pb-24">
+      {/* HERO */}
+      <section className="container mx-auto px-6 mb-16 md:mb-24">
+        <div className="max-w-4xl space-y-6 md:space-y-8">
+          <div className="section-label flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-orange-accent animate-pulse" />
+            Live Infrastructure Signals
+          </div>
+          <h1 className="text-4xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
+            Market <br />
+            <span className="text-orange-accent">Intelligence.</span>
+          </h1>
+          <p className="text-lg md:text-2xl text-slate-500 font-light leading-relaxed max-w-2xl">
+            InfraX aggregates and curates infrastructure intelligence across utility filings, interconnection queues, and operator disclosures.
+          </p>
+        </div>
+      </section>
+
+      {/* SIGNAL FEED */}
+      <section className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-12 gap-12">
+          {/* Sidebar Filters */}
+          <div className="lg:col-span-3 space-y-8">
+            <div className="p-8 bg-slate-50 border border-slate-200 space-y-6">
+              <div className="text-[10px] font-black text-navy uppercase tracking-widest flex items-center gap-2">
+                <Filter size={14} /> Filter Signals
+              </div>
+              <div className="space-y-2">
+                {['All Signals', 'Utility Filings', 'Interconnect Queues', 'Operator Disclosures', 'Supply Chain', 'Pricing'].map((filter, i) => (
+                  <button key={i} className={`w-full text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest transition-colors ${i === 0 ? 'bg-navy text-white' : 'bg-white text-navy hover:bg-slate-100 border border-slate-200'}`}>
+                    {filter}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-8 bg-navy text-white space-y-6">
+              <div className="text-[10px] font-black text-orange-accent uppercase tracking-widest">Signal Source</div>
+              <p className="text-xs text-white/40 leading-relaxed">
+                Signals are derived from real-world grid and operator data — not static inventory lists.
+              </p>
+              <div className="space-y-4">
+                {[
+                  { label: "Confidence", val: "94%" },
+                  { label: "Latency", val: "240ms" },
+                  { label: "Nodes", val: "1,842" }
+                ].map((stat, i) => (
+                  <div key={i} className="flex justify-between items-center border-b border-white/10 pb-2">
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-white/40">{stat.label}</span>
+                    <span className="text-xs font-black">{stat.val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Main Feed */}
+          <div className="lg:col-span-9 space-y-8">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-6">
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Intelligence Stream</div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-navy uppercase tracking-widest">
+                  <Clock size={14} /> Last Update: Just Now
+                </div>
+              </div>
+            </div>
+
+            {isLoading ? (
+              <div className="py-24 flex flex-col items-center justify-center space-y-6">
+                <div className="w-12 h-12 border-4 border-navy border-t-orange-accent rounded-full animate-spin" />
+                <div className="text-[10px] font-black text-navy uppercase tracking-widest animate-pulse">Processing Grid Telemetry...</div>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {signals.map((signal, i) => (
+                  <div key={i} className="bg-white border border-slate-200 p-8 group hover:border-orange-accent transition-all hover:shadow-xl relative overflow-hidden">
+                    <div className={`absolute top-0 left-0 w-1 h-full ${
+                      signal.severity === 'High' ? 'bg-red-500' : 
+                      signal.severity === 'Medium' ? 'bg-orange-accent' : 'bg-blue-500'
+                    }`} />
+                    
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                      <div className="space-y-4 flex-1">
+                        <div className="flex items-center gap-4">
+                          <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white ${
+                            signal.severity === 'High' ? 'bg-red-500' : 
+                            signal.severity === 'Medium' ? 'bg-orange-accent' : 'bg-blue-500'
+                          }`}>
+                            {signal.category}
+                          </span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{signal.timestamp}</span>
+                        </div>
+                        <h3 className="text-xl font-black text-navy uppercase tracking-tight">{signal.signal}</h3>
+                        <p className="text-sm text-slate-500 font-light leading-relaxed max-w-2xl">
+                          {signal.impact}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end gap-4">
+                        <button className="flex items-center gap-2 px-6 py-3 bg-navy text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-accent transition-colors">
+                          Analyze <ArrowUpRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Market Stats Grid */}
+            <div className="grid md:grid-cols-2 gap-8 pt-12">
+              <div className="p-10 bg-slate-50 border border-slate-200 space-y-6">
+                <div className="flex items-center gap-4">
+                  <Database size={24} className="text-orange-accent" />
+                  <h4 className="text-lg font-black text-navy uppercase tracking-tight">Regional Pricing</h4>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    { market: "Northern Virginia", price: "$145-165", trend: "+4.2%" },
+                    { market: "Columbus, OH", price: "$125-140", trend: "+2.8%" },
+                    { market: "Dallas, TX", price: "$130-150", trend: "+3.5%" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex justify-between items-center border-b border-slate-200 pb-3">
+                      <span className="text-xs font-bold text-navy">{item.market}</span>
+                      <div className="text-right">
+                        <div className="text-xs font-black text-navy">{item.price}</div>
+                        <div className="text-[9px] font-bold text-red-500">{item.trend}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-10 bg-slate-50 border border-slate-200 space-y-6">
+                <div className="flex items-center gap-4">
+                  <ShieldCheck size={24} className="text-orange-accent" />
+                  <h4 className="text-lg font-black text-navy uppercase tracking-tight">Grid Stability</h4>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    { market: "PJM Interconnect", status: "Critical", risk: "High" },
+                    { market: "ERCOT", status: "Stable", risk: "Medium" },
+                    { market: "CAISO", status: "Constrained", risk: "High" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex justify-between items-center border-b border-slate-200 pb-3">
+                      <span className="text-xs font-bold text-navy">{item.market}</span>
+                      <div className="text-right">
+                        <div className={`text-xs font-black ${item.status === 'Critical' ? 'text-red-500' : 'text-navy'}`}>{item.status}</div>
+                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Risk: {item.risk}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      <div className="container mx-auto px-6 py-24 space-y-24">
-        {/* The Live Ticker Visualizer */}
-        <div className="relative bg-black border border-white/10 p-6 overflow-hidden rounded-sm group shadow-2xl">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#f37021] to-transparent" />
-          <div className="flex gap-12 animate-[shimmer_45s_linear_infinite] whitespace-nowrap">
-            {[...TICKER_SIGNALS, ...TICKER_SIGNALS].map((s, i) => (
-              <div key={i} className="flex items-center gap-4 py-2">
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 bg-white/10 text-[#f37021]">{s.category}</span>
-                <span className="text-xs font-mono text-white/80">{s.signal}</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Ticker Sections Grid */}
-        <div className="grid lg:grid-cols-3 gap-px bg-white/10 border border-white/10 shadow-2xl">
-          {[
-            { 
-              title: "Now Trending", 
-              icon: <TrendingUp className="text-[#f37021]" />, 
-              img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8",
-              items: [
-                { label: "Regional Bottlenecks", desc: "Northern Virginia grid capacity committed through 2027." },
-                { label: "Cooling Shifts", desc: "Direct-to-chip liquid cooling now mandatory spec." }
-              ]
-            },
-            { 
-              title: "Deal Signals", 
-              icon: <Zap className="text-[#f37021]" />, 
-              img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
-              items: [
-                { label: "Quiet Capacity", desc: "Sub-10MW chunks surfacing in Dallas and Phoenix." },
-                { label: "Partner Side", desc: "Hyperscale-adjacent shells identified with utility approval locked." }
-              ]
-            },
-            { 
-              title: "Operational Alerts", 
-              icon: <AlertTriangle className="text-[#f37021]" />, 
-              img: "https://images.unsplash.com/photo-1563986768609-322da13575f3",
-              items: [
-                { label: "Utility Delays", desc: "Transformer lead times easing but substation permitting remains stagnant." },
-                { label: "Equipment Risks", desc: "Switchgear delivery windows hitting 50+ weeks." }
-              ]
-            }
-          ].map((sec, i) => (
-            <div key={i} className="relative p-12 space-y-10 group overflow-hidden bg-navy">
-              <img src={sec.img} className="absolute inset-0 w-full h-full object-cover opacity-10 grayscale group-hover:opacity-30 transition-all duration-700" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-10">
-                  {sec.icon}
-                  <h3 className="text-2xl font-black uppercase tracking-tighter">{sec.title}</h3>
-                </div>
-                <ul className="space-y-8">
-                  {sec.items.map((item, idx) => (
-                    <li key={idx} className="space-y-2">
-                      <div className="text-[10px] font-black uppercase tracking-widest text-[#f37021]">{item.label}</div>
-                      <p className="text-sm text-white/50 leading-relaxed">{item.desc}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* AI Insight Bar */}
-        <div className="p-12 bg-white/5 border border-[#f37021]/30 flex items-start gap-8 relative overflow-hidden">
-           <img src="https://images.unsplash.com/photo-1591453089816-0fbb971b454c" className="absolute inset-0 w-full h-full object-cover opacity-10 grayscale brightness-50" />
-           <div className="relative z-10 flex gap-8">
-            <Info className="w-10 h-10 text-[#f37021] flex-shrink-0" />
-            <p className="text-xl text-white/90 font-light leading-relaxed">
-              Market transition is accelerating. Supply-side constraints are moving from space to power-ready shells. Regional focus is shifting toward secondary metros with utility headroom over primary saturated hubs.
-            </p>
-           </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -23,6 +23,9 @@ const AboutPage: React.FC = () => {
             >
               INFRAX <br /><span className="text-orange-accent">LEADERSHIP.</span>
             </h1>
+            <p className="text-xl text-white/60 font-light leading-relaxed max-w-2xl">
+              The intelligence layer for AI-scale infrastructure deployment.
+            </p>
           </div>
         </div>
       </section>
