@@ -63,12 +63,12 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-4">
+          <nav className="hidden xl:flex items-center gap-8">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.1em] transition-all hover:text-orange-accent relative py-2 group ${
+                className={`whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:text-orange-accent relative py-2 group ${
                   isActive(item.href)
                     ? 'text-orange-accent'
                     : showSolidHeader
