@@ -1,9 +1,9 @@
+'use client';
 
-import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { SECURITY_STATS } from '../constants';
+import { SECURITY_STATS } from '@/constants';
 
-const Stats: React.FC = () => {
+export default function Stats() {
   return (
     <section className="py-24 bg-slate-50 border-y border-slate-100" id="intelligence">
       <div className="container mx-auto px-6">
@@ -65,6 +65,4 @@ const Stats: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default Stats;
+}

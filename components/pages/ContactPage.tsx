@@ -1,7 +1,8 @@
-import React from 'react';
-import { Mail, Phone, MapPin, Send, MessageSquare, Radio, Server, ShieldCheck } from 'lucide-react';
+'use client';
 
-const ContactPage: React.FC = () => {
+import { Mail, Phone, MapPin, Send, Radio, Server, ShieldCheck } from 'lucide-react';
+
+export default function ContactPage() {
   return (
     <div className="pt-40 bg-white selection:bg-orange-accent">
       <div className="container mx-auto px-6 pb-32">
@@ -102,6 +103,4 @@ const ContactPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default ContactPage;
+}

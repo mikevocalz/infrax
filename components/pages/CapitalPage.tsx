@@ -1,7 +1,21 @@
-import React from 'react';
-import { Landmark, ShieldAlert, BarChart3, ArrowRight } from 'lucide-react';
+import { ShieldAlert, BarChart3, ArrowRight } from 'lucide-react';
 
-const CapitalPage: React.FC = () => {
+const RISK_TARGETS = [
+  { title: 'Private Equity', desc: 'Due diligence backed by real-world grid constraints.' },
+  { title: 'Infrastructure Funds', desc: 'Long-term asset validation and expansion modeling.' },
+  { title: 'Hyperscale Capital', desc: 'Strategic deployment alignment for sovereign-scale projects.' },
+  { title: 'Sovereign Entities', desc: 'National-level infrastructure planning and risk mitigation.' },
+];
+
+const ADVISORY_SERVICES = [
+  { title: 'Pre-acquisition Modeling', desc: 'Validate site feasibility before the LOI is signed.' },
+  { title: 'Interconnection Risk Analysis', desc: 'Deep-dive into utility queues and substation capacity.' },
+  { title: 'Value-Creation Identification', desc: 'Finding hidden capacity in existing infrastructure footprints.' },
+  { title: 'Expansion Viability Audits', desc: 'Ensuring Phase 2 and 3 are physically possible.' },
+  { title: 'Off-Market Due Diligence', desc: 'Technical validation of non-public asset opportunities.' },
+];
+
+export default function CapitalPage() {
   return (
     <div className="pt-32 pb-24">
       {/* HERO */}
@@ -14,7 +28,8 @@ const CapitalPage: React.FC = () => {
             <span className="text-orange-accent">Validation.</span>
           </h1>
           <p className="text-lg md:text-2xl text-slate-500 font-light leading-relaxed max-w-2xl">
-            Infrastructure capital deployed without grid validation carries systemic risk. We validate feasibility before capital is exposed.
+            Infrastructure capital deployed without grid validation carries systemic risk. We validate feasibility
+            before capital is exposed.
           </p>
         </div>
       </section>
@@ -33,17 +48,16 @@ const CapitalPage: React.FC = () => {
                 <span className="text-orange-accent">Systemic Risk.</span>
               </h2>
               <p className="text-xl text-white/60 font-light leading-relaxed">
-                The gap between "theoretical capacity" and "deliverable megawatts" is the single greatest threat to infrastructure investment today.
+                The gap between &ldquo;theoretical capacity&rdquo; and &ldquo;deliverable megawatts&rdquo; is the
+                single greatest threat to infrastructure investment today.
               </p>
             </div>
             <div className="grid gap-6">
-              {[
-                { title: "Private Equity", desc: "Due diligence backed by real-world grid constraints." },
-                { title: "Infrastructure Funds", desc: "Long-term asset validation and expansion modeling." },
-                { title: "Hyperscale Capital", desc: "Strategic deployment alignment for sovereign-scale projects." },
-                { title: "Sovereign Entities", desc: "National-level infrastructure planning and risk mitigation." }
-              ].map((item, i) => (
-                <div key={i} className="p-8 border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors">
+              {RISK_TARGETS.map((item) => (
+                <div
+                  key={item.title}
+                  className="p-8 border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
+                >
                   <h4 className="text-lg font-black uppercase tracking-tight mb-2">{item.title}</h4>
                   <p className="text-sm text-white/40 leading-relaxed">{item.desc}</p>
                 </div>
@@ -53,7 +67,7 @@ const CapitalPage: React.FC = () => {
         </div>
       </section>
 
-      {/* SERVICES */}
+      {/* ADVISORY SERVICES */}
       <section className="py-24">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mb-16">
@@ -64,14 +78,11 @@ const CapitalPage: React.FC = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { title: "Pre-acquisition Modeling", desc: "Validate site feasibility before the LOI is signed." },
-              { title: "Interconnection Risk Analysis", desc: "Deep-dive into utility queues and substation capacity." },
-              { title: "Value-Creation Identification", desc: "Finding hidden capacity in existing infrastructure footprints." },
-              { title: "Expansion Viability Audits", desc: "Ensuring Phase 2 and 3 are physically possible." },
-              { title: "Off-Market Due Diligence", desc: "Technical validation of non-public asset opportunities." }
-            ].map((item, i) => (
-              <div key={i} className="p-10 border border-slate-200 hover:border-orange-accent transition-all group">
+            {ADVISORY_SERVICES.map((item) => (
+              <div
+                key={item.title}
+                className="p-10 border border-slate-200 hover:border-orange-accent transition-all group"
+              >
                 <div className="w-12 h-12 bg-slate-100 flex items-center justify-center text-navy mb-8 group-hover:bg-orange-accent group-hover:text-white transition-colors">
                   <BarChart3 size={24} />
                 </div>
@@ -85,7 +96,9 @@ const CapitalPage: React.FC = () => {
           </div>
 
           <div className="mt-24 p-12 bg-slate-50 border border-slate-200 text-center space-y-8">
-            <h3 className="text-3xl font-black text-navy uppercase tracking-tight">Request Capital Feasibility Review</h3>
+            <h3 className="text-3xl font-black text-navy uppercase tracking-tight">
+              Request Capital Feasibility Review
+            </h3>
             <button className="px-12 py-6 bg-navy text-white font-black uppercase tracking-widest hover:bg-orange-accent transition-all">
               Initiate Review
             </button>
@@ -94,6 +107,4 @@ const CapitalPage: React.FC = () => {
       </section>
     </div>
   );
-};
-
-export default CapitalPage;
+}

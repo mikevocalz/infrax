@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, Send, X, Bot, User, Loader2, Radio } from 'lucide-react';
-import { getSecurityInsights } from '../services/gemini';
-import { ChatMessage } from '../types';
+'use client';
 
-const ChatBot: React.FC = () => {
+import { useState, useRef, useEffect } from 'react';
+import { Send, X, Bot, User, Loader2, Radio } from 'lucide-react';
+import { getSecurityInsights } from '@/services/gemini';
+import { ChatMessage } from '@/types';
+
+export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: "Welcome to InFraX. I'm your Market Intelligence assistant. How can I help clarify your infrastructure strategy today?" }
@@ -113,6 +115,4 @@ const ChatBot: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default ChatBot;
+}

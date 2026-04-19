@@ -1,5 +1,4 @@
-// Added React import to resolve "Cannot find namespace 'React'" error.
-import React from 'react';
+import type { LucideIcon } from 'lucide-react';
 
 export interface NavItem {
   label: string;
@@ -10,7 +9,13 @@ export interface Service {
   id: string;
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: LucideIcon;
+}
+
+export interface Pillar {
+  title: string;
+  description: string;
+  icon: LucideIcon;
 }
 
 export interface Testimonial {
@@ -39,6 +44,8 @@ export interface Asset {
 export interface MarketSignal {
   id: string;
   category: string;
-  text: string;
+  signal: string;
+  impact?: string;
+  timestamp?: string;
   severity: 'High' | 'Medium' | 'Low';
 }

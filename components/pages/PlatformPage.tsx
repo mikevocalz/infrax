@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Cpu, Zap, Shield, BarChart3, Target, Layers, Network, Database, ChevronRight, ArrowRight, Gauge, Activity } from 'lucide-react';
+import { Zap, Shield, BarChart3, Target, ChevronRight } from 'lucide-react';
 
-const PlatformPage: React.FC = () => {
+export default function PlatformPage() {
   return (
     <div className="pt-32 pb-24">
       {/* HERO */}
@@ -263,6 +262,4 @@ const PlatformPage: React.FC = () => {
       </section>
     </div>
   );
-};
-
-export default PlatformPage;
+}

@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X, Radio } from 'lucide-react';
-import { NAV_ITEMS } from '../constants';
+import { NAV_ITEMS } from '@/constants';
 
-interface HeaderProps {
-  currentPath: string;
-  onNavigate: (path: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
+export default function Header() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Determine header appearance based on scroll or page type
-  const isLightBackgroundPage = currentPath !== 'home' && currentPath !== 'intelligence';
-  const showSolidHeader = isScrolled || isLightBackgroundPage;
+  const showSolidHeader = isScrolled || pathname !== '/';
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -26,129 +24,134 @@ const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
     };
   }, [mobileMenuOpen]);
 
+  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
-  }, [currentPath]);
+  }, [pathname]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (path: string) => {
-    onNavigate(path);
-    setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
     <>
-      <header 
+      <header
         className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-          showSolidHeader && !mobileMenuOpen 
-            ? 'glass-nav py-3' 
-            : mobileMenuOpen 
-              ? 'bg-navy py-4 border-b border-white/10'
-              : 'bg-transparent py-6'
+          showSolidHeader && !mobileMenuOpen
+            ? 'glass-nav py-3'
+            : mobileMenuOpen
+            ? 'bg-navy py-4 border-b border-white/10'
+            : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-6 flex items-center justify-between relative">
           {/* Logo */}
-          <div 
-            className="flex items-center gap-2 group cursor-pointer"
-            onClick={() => handleNavClick('home')}
-          >
+          <Link href="/" className="flex items-center gap-2 group">
             <Radio className="w-6 h-6 text-orange-accent" />
-            <span className={`text-xl font-black tracking-tighter uppercase transition-colors ${
-              (showSolidHeader && !mobileMenuOpen) ? 'text-navy' : 'text-white'
-            }`}>
+            <span
+              className={`text-xl font-black tracking-tighter uppercase transition-colors ${
+                showSolidHeader && !mobileMenuOpen ? 'text-navy' : 'text-white'
+              }`}
+            >
               InFra<span className="text-orange-accent">X</span>
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-8">
+          <nav className="hidden xl:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
-              <button
+              <Link
                 key={item.label}
-                onClick={() => handleNavClick(item.href)}
-                className={`text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:text-orange-accent relative py-2 group ${
-                  currentPath === item.href 
-                  ? 'text-orange-accent' 
-                  : showSolidHeader ? 'text-navy/70' : 'text-white/70'
+                href={item.href}
+                className={`whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:text-orange-accent relative py-2 group ${
+                  isActive(item.href)
+                    ? 'text-orange-accent'
+                    : showSolidHeader
+                    ? 'text-navy/70'
+                    : 'text-white/70'
                 }`}
               >
                 {item.label}
-                <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-orange-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${currentPath === item.href ? 'scale-x-100' : ''}`} />
-              </button>
+                <span
+                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-orange-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${
+                    isActive(item.href) ? 'scale-x-100' : ''
+                  }`}
+                />
+              </Link>
             ))}
-            <div className={`h-6 w-px ${showSolidHeader ? 'bg-navy/10' : 'bg-white/20'}`} />
-            <button 
-              onClick={() => handleNavClick('platform')}
-              className={`px-6 py-2.5 border border-orange-accent text-orange-accent hover:bg-orange-accent hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest rounded-none ${showSolidHeader ? 'border-navy/20 text-navy hover:border-orange-accent' : ''}`}
+            <div className={`h-6 w-px flex-shrink-0 ${showSolidHeader ? 'bg-navy/10' : 'bg-white/20'}`} />
+            <Link
+              href="/platform"
+              className={`whitespace-nowrap px-4 py-2 border border-orange-accent text-orange-accent hover:bg-orange-accent hover:text-white transition-all text-[9px] font-bold uppercase tracking-widest rounded-none ${
+                showSolidHeader ? 'border-navy/20 text-navy hover:border-orange-accent hover:text-white' : ''
+              }`}
             >
               Explore InfraAlign™
-            </button>
-            <button 
-              onClick={() => handleNavClick('contact')}
-              className="px-6 py-2.5 bg-orange-accent text-white hover:bg-[#d95d12] transition-all text-[10px] font-bold uppercase tracking-widest rounded-none shadow-lg shadow-orange-500/20"
+            </Link>
+            <Link
+              href="/contact"
+              className="whitespace-nowrap px-4 py-2 bg-orange-accent text-white hover:bg-[#d95d12] transition-all text-[9px] font-bold uppercase tracking-widest rounded-none shadow-lg shadow-orange-500/20"
             >
-              Request Infrastructure Audit
-            </button>
+              Request Audit
+            </Link>
           </nav>
 
-          {/* Mobile Toggle Button - High Priority Z-Index */}
-          <button 
+          {/* Mobile Toggle */}
+          <button
             className={`xl:hidden p-3 transition-colors relative z-[110] focus:outline-none ${
-              (showSolidHeader && !mobileMenuOpen) ? "text-navy" : "text-white"
-            }`} 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              showSolidHeader && !mobileMenuOpen ? 'text-navy' : 'text-white'
+            }`}
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             {mobileMenuOpen ? <X size={32} strokeWidth={2.5} /> : <Menu size={32} strokeWidth={2.5} />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay - Outside header for cleaner z-stacking */}
-      <div 
+      {/* Mobile Menu Overlay */}
+      <div
         className={`fixed inset-0 z-[90] bg-navy transition-all duration-500 ease-in-out xl:hidden ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-10'
+          mobileMenuOpen
+            ? 'opacity-100 pointer-events-auto translate-y-0'
+            : 'opacity-0 pointer-events-none -translate-y-10'
         }`}
       >
-        {/* Decorative Grid Background for Mobile Menu */}
         <div className="absolute inset-0 industrial-grid-dark opacity-10 pointer-events-none" />
-        
+
         <div className="h-full flex flex-col p-8 pt-32 overflow-y-auto relative z-10">
           <div className="flex flex-col gap-6">
-            <span className="text-orange-accent font-black text-[10px] uppercase tracking-[0.5em] mb-4">Navigation Index</span>
+            <span className="text-orange-accent font-black text-[10px] uppercase tracking-[0.5em] mb-4">
+              Navigation Index
+            </span>
             {NAV_ITEMS.map((item, idx) => (
-              <button
+              <Link
                 key={item.label}
+                href={item.href}
                 className={`text-4xl font-black uppercase tracking-tighter text-left transition-all duration-300 transform ${
-                  currentPath === item.href 
-                    ? 'text-orange-accent translate-x-4' 
+                  isActive(item.href)
+                    ? 'text-orange-accent translate-x-4'
                     : 'text-white/80 hover:text-white hover:translate-x-2'
                 }`}
                 style={{ transitionDelay: `${idx * 50}ms` }}
-                onClick={() => handleNavClick(item.href)}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
           </div>
 
           <div className="mt-auto pt-10 border-t border-white/10 flex flex-col gap-8">
-            <button 
-              onClick={() => handleNavClick('contact')}
+            <Link
+              href="/contact"
               className="w-full py-6 bg-orange-accent text-white rounded-none font-black text-xl uppercase tracking-widest text-center shadow-2xl shadow-orange-500/30 active:scale-95 transition-transform"
             >
               Request Infrastructure Audit
-            </button>
-            
+            </Link>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Direct Link</span>
@@ -164,6 +167,4 @@ const Header: React.FC<HeaderProps> = ({ currentPath, onNavigate }) => {
       </div>
     </>
   );
-};
-
-export default Header;
+}
