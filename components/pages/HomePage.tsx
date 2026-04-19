@@ -120,10 +120,10 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="border border-white/10 shadow-2xl overflow-hidden bg-navy/50 aspect-video relative group flex items-center justify-center">
-                <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 opacity-50">
                   <img
-                    src="https://images.unsplash.com/photo-1551288049-bbbda536339a?q=80&w=2000"
-                    className="w-full h-full object-cover"
+                    src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000"
+                    className="w-full h-full object-cover grayscale"
                     alt="InfraAlign modeling engine"
                   />
                 </div>

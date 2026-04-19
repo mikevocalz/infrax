@@ -1,0 +1,7 @@
+{
+  "/platform/page": "app/platform/page.js",
+  "/execution/page": "app/execution/page.js",
+  "/about/page": "app/about/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/intelligence/page": "app/intelligence/page.js"
+}
