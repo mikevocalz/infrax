@@ -202,16 +202,13 @@ export default function AboutPage() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="flex flex-col items-center justify-center p-10 bg-white border border-navy/10 aspect-square shadow-xl group hover:bg-navy transition-all duration-300 overflow-hidden"
+                  className="flex flex-col items-center justify-center p-6 bg-white border border-navy/10 aspect-square shadow-xl group hover:bg-navy transition-all duration-300 overflow-hidden"
                 >
-                  <div className="text-left w-full max-w-fit mx-auto">
-                    <div
-                      className="font-black text-navy group-hover:text-orange-accent tracking-tighter uppercase transition-colors duration-300 leading-none mb-3"
-                      style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
-                    >
+                  <div className="text-left w-full">
+                    <div className="text-xl font-black text-navy group-hover:text-orange-accent tracking-tighter uppercase transition-colors duration-300 leading-none mb-3 break-words">
                       {stat.val}
                     </div>
-                    <div className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] group-hover:text-white/70 transition-colors duration-300 leading-tight">
+                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.15em] group-hover:text-white/70 transition-colors duration-300 leading-tight">
                       {stat.label}
                     </div>
                   </div>
