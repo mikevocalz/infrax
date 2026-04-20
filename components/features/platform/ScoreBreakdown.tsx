@@ -24,7 +24,7 @@ export default function ScoreBreakdown({ result, onClose }: ScoreBreakdownProps)
         <div className="space-y-1">
           <div className="text-[9px] font-bold uppercase tracking-widest text-white/40">Score Breakdown</div>
           <div className="font-black uppercase tracking-tight text-lg leading-tight">{c.name}</div>
-          <div className="text-sm text-white/60">{c.market}, {c.state} — {c.operator}</div>
+          <div className="text-sm text-white/60">{c.market}, {c.state}</div>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">

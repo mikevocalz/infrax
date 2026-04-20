@@ -115,7 +115,7 @@ export const METRICS = [
 
 export const LEADERSHIP = [
   {
-    name: 'Kirk "Hurricane" Horton',
+    name: 'Kirk Horton',
     role: 'Founder | Data Center Strategy & Development',
     bio: 'A 30-year executive leader with deep experience in data center development and infrastructure commercialization. Kirk brings operational realism to infrastructure expansion.',
     expertise: ['Site Selection', 'Capacity Planning', 'Deal Mapping'],
