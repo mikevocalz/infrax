@@ -39,7 +39,7 @@ const AUDIENCE_SEGMENTS = [
 
 const HOW_IT_WORKS = [
   { step: '01', label: 'Define Requirements', desc: 'MW range, geography, timeline, cooling, certifications.' },
-  { step: '02', label: 'InfraAlign™ Models', desc: 'Physics-first scoring across real utility data and interconnect queues.' },
+  { step: '02', label: 'Infra-Align™ Models', desc: 'Physics-first scoring across real utility data and interconnect queues.' },
   { step: '03', label: 'Candidates Ranked', desc: 'Shortlist of fit-scored options — off-market and on-market.' },
   { step: '04', label: 'Diligence Executed', desc: 'Deep validation: utility LOIs, operator capability, expansion modeling.' },
   { step: '05', label: 'Capital Deployed', desc: 'Data-backed term negotiation and delivery accountability framework.' },
@@ -142,7 +142,7 @@ function QuickIntakeForm() {
         href={`/platform`}
         className="flex items-center justify-between px-6 py-3.5 bg-navy text-white font-black uppercase tracking-widest text-[10px] hover:bg-orange-accent transition-colors w-full"
       >
-        <span>Run Full InfraAlign™ Model</span>
+        <span>Run Full Infra-Align™ Model</span>
         <ArrowRight size={14} />
       </Link>
       <div className="text-[9px] text-slate-400 text-center">
@@ -196,7 +196,7 @@ export default function HomePage() {
                 href="/platform"
                 className="px-8 py-5 md:px-12 md:py-6 border-2 border-white/20 text-white font-black uppercase tracking-widest hover:bg-white/5 transition-all flex items-center justify-center gap-3 text-sm md:text-base"
               >
-                Explore InfraAlign™
+                Explore Infra-Align™
                 <ChevronRight size={20} />
               </Link>
             </div>
@@ -298,7 +298,7 @@ export default function HomePage() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
                 <div className="w-3 h-3 rounded-full bg-green-500" />
                 <div className="ml-4 text-[10px] font-mono text-white/40 uppercase tracking-widest">
-                  InfraAlign™ // Modeling Engine
+                  Infra-Align™ // Modeling Engine
                 </div>
               </div>
               <div className="border border-white/10 shadow-2xl overflow-hidden bg-navy/50 aspect-video relative group flex items-center justify-center">
@@ -306,7 +306,7 @@ export default function HomePage() {
                   <img
                     src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000"
                     className="w-full h-full object-cover grayscale"
-                    alt="InfraAlign modeling engine"
+                    alt="Infra-Align modeling engine"
                   />
                 </div>
                 <div className="relative z-10 text-center space-y-6 p-12">
@@ -323,11 +323,11 @@ export default function HomePage() {
             <div className="space-y-10">
               <div className="section-label !text-orange-accent">The Engine</div>
               <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-                InfraAlign™ <br />
+                Infra-Align™ <br />
                 <span className="text-white/40">Infrastructure Modeled Before It Is Built.</span>
               </h2>
               <p className="text-xl text-white/60 font-light leading-relaxed">
-                InfraAlign™ ingests deployment requirements, simulates real-world constraints, and produces
+                Infra-Align™ ingests deployment requirements, simulates real-world constraints, and produces
                 feasibility-ranked deployment scenarios — before capital is committed.
               </p>
               <div className="grid grid-cols-1 gap-4">
@@ -354,7 +354,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="space-y-8">
-              <div className="section-label">Try InfraAlign™</div>
+              <div className="section-label">Try Infra-Align™</div>
               <h2 className="text-4xl md:text-5xl font-black text-navy uppercase tracking-tighter leading-none">
                 Model Your <span className="text-orange-accent">Requirements.</span>
               </h2>
@@ -367,7 +367,7 @@ export default function HomePage() {
 
             <div className="space-y-4">
               <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-4">
-                Sample InfraAlign™ Output — 10 MW · NOVA · 12 months
+                Sample Infra-Align™ Output — 10 MW · NOVA · 12 months
               </div>
               {SAMPLE_RESULTS.map((r) => (
                 <div

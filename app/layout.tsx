@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'InFraX | The Intelligence Layer for AI-Scale Infrastructure',
   description:
-    'InfraX aligns power, land, capital, and operators using physics-first modeling and real utility constraints via InfraAlign™.',
+    'InfraX aligns power, land, capital, and operators using physics-first modeling and real utility constraints via Infra-Align™.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

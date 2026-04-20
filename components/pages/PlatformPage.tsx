@@ -8,7 +8,7 @@ export default function PlatformPage() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-orange-accent animate-pulse" />
-            <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest">InfraAlign™ v1.0</span>
+            <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest">Infra-Align™ v1.0</span>
           </div>
           <div className="w-px h-4 bg-white/10" />
           <span className="text-[10px] font-mono text-white/30 uppercase tracking-widest">Modeling Environment</span>

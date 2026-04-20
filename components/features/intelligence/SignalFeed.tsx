@@ -91,7 +91,7 @@ function SignalCard({ signal }: { signal: MarketSignal }) {
               <Bell size={10} /> Watch Signal
             </button>
             <button className="px-4 py-2 border border-slate-200 text-slate-600 text-[9px] font-black uppercase tracking-widest hover:border-navy transition-colors">
-              Run InfraAlign™
+              Run Infra-Align™
             </button>
           </div>
         </div>

@@ -339,7 +339,7 @@ export const MANDATE_PHASES: PhaseStep[] = [
   },
   {
     phase: 'modeling',
-    label: 'InfraAlign™ Modeling',
+    label: 'Infra-Align™ Modeling',
     description: 'Physics-first feasibility modeling across target regions.',
     status: 'complete',
     deliverables: [
@@ -442,8 +442,8 @@ export const LEADERSHIP: Leader[] = [
     id: 'l-002',
     name: 'Marcus Okafor',
     role: 'Chief Technology Officer',
-    bio: 'Power systems engineer with deep expertise in utility interconnection modeling and grid constraint analysis. Built the InfraAlign™ scoring engine from first principles. 15+ years at the intersection of power and compute.',
-    expertise: ['Power Systems Engineering', 'InfraAlign™ Architecture', 'Interconnection Modeling', 'Constraint Analysis'],
+    bio: 'Power systems engineer with deep expertise in utility interconnection modeling and grid constraint analysis. Built the Infra-Align™ scoring engine from first principles. 15+ years at the intersection of power and compute.',
+    expertise: ['Power Systems Engineering', 'Infra-Align™ Architecture', 'Interconnection Modeling', 'Constraint Analysis'],
     decisionDomains: ['Technical Validation', 'Scoring Engine', 'Data Architecture', 'Modeling Standards'],
     background: ['NERC Reliability Standards Committee', 'GE Grid Solutions', 'MIT Energy Initiative'],
   },

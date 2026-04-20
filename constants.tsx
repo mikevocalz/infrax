@@ -3,7 +3,7 @@ import type { NavItem, Service, Pillar } from '@/types';
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'InfraAlign™', href: '/platform' },
+  { label: 'Infra-Align™', href: '/platform' },
   { label: 'Intelligence', href: '/intelligence' },
   { label: 'Execution', href: '/execution' },
   { label: 'Capital', href: '/capital' },

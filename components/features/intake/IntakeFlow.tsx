@@ -98,7 +98,7 @@ export default function IntakeFlow() {
           {[
             'Analyst reviews your requirements (1 business day)',
             'Scoping call to validate constraints and priorities',
-            'InfraAlign™ modeling initiated within 3 business days',
+            'Infra-Align™ modeling initiated within 3 business days',
             'Scored candidate shortlist delivered within 7 business days',
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-3 text-sm text-slate-600">

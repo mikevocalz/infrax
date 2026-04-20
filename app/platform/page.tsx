@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import PlatformPage from '@/components/pages/PlatformPage';
 
 export const metadata: Metadata = {
-  title: 'InfraAlign™ Engine | InFraX',
+  title: 'Infra-Align™ Engine | InFraX',
   description: 'Physics-first infrastructure modeling for power-constrained markets.',
 };
 

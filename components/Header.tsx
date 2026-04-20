@@ -91,7 +91,7 @@ export default function Header() {
                 showSolidHeader ? 'border-navy/20 text-navy hover:border-orange-accent hover:text-white' : ''
               }`}
             >
-              Explore InfraAlign™
+              Explore Infra-Align™
             </Link>
             <Link
               href="/contact"

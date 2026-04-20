@@ -26,7 +26,7 @@ export default function Footer() {
               <li>
                 <Link href="/platform" className="hover:text-white transition-colors flex items-center gap-3">
                   <div className="w-1.5 h-1.5 bg-white/10" />
-                  InfraAlign™ Engine
+                  Infra-Align™ Engine
                 </Link>
               </li>
               <li>
