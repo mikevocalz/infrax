@@ -118,13 +118,26 @@ function QuickIntakeForm() {
             className="w-full border border-slate-200 px-3 py-2.5 text-sm text-navy focus:outline-none focus:border-navy bg-white"
           >
             <option value="">Any</option>
-            <option>NOVA</option>
-            <option>CMH</option>
-            <option>DFW</option>
-            <option>CHI</option>
-            <option>ATL</option>
-            <option>PDX</option>
-            <option>PHX</option>
+            <option value="NOVA">NOVA — Northern Virginia</option>
+            <option value="NYC">NYC — New York / New Jersey</option>
+            <option value="CHI">CHI — Chicago, IL</option>
+            <option value="DFW">DFW — Dallas-Fort Worth, TX</option>
+            <option value="ATL">ATL — Atlanta, GA</option>
+            <option value="CMH">CMH — Columbus, OH</option>
+            <option value="DEN">DEN — Denver, CO</option>
+            <option value="PHX">PHX — Phoenix, AZ</option>
+            <option value="LAX">LAX — Los Angeles, CA</option>
+            <option value="SJC">SJC — Silicon Valley, CA</option>
+            <option value="SEA">SEA — Seattle, WA</option>
+            <option value="PDX">PDX — Portland, OR</option>
+            <option value="MIA">MIA — Miami, FL</option>
+            <option value="BOS">BOS — Boston, MA</option>
+            <option value="SLC">SLC — Salt Lake City, UT</option>
+            <option value="LAS">LAS — Las Vegas, NV</option>
+            <option value="MSP">MSP — Minneapolis, MN</option>
+            <option value="SAC">SAC — Sacramento, CA</option>
+            <option value="IAD">IAD — Washington D.C.</option>
+            <option value="DTW">DTW — Detroit, MI</option>
           </select>
         </div>
         <div>
