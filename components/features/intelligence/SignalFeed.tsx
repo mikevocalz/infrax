@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import type { MarketSignal, SignalCategory, SignalSeverity } from '@/types';
-import { SIGNALS } from '@/lib/mock-data';
+const SIGNALS: MarketSignal[] = []; // No production signals before licensed, reviewed source integration.
 import StatusBadge from '@/components/ui/StatusBadge';
-import TrendChart from './TrendChart';
+
 import { Filter, ChevronDown, ChevronUp, ExternalLink, Bell } from 'lucide-react';
 
 const CATEGORIES: { value: SignalCategory | 'ALL'; label: string }[] = [
@@ -165,8 +165,8 @@ export default function SignalFeed() {
         <div className="bg-navy text-white p-6 space-y-4">
           <div className="text-[10px] font-black uppercase tracking-widest text-orange-accent">Signal Feed Status</div>
           {[
-            { label: 'Confidence', val: '94%' },
-            { label: 'Latency', val: '240ms' },
+            { label: 'Verification', val: 'Unavailable' },
+            { label: 'Feed status', val: 'Not connected' },
             { label: 'Active Signals', val: `${SIGNALS.length}` },
           ].map(stat => (
             <div key={stat.label} className="flex justify-between border-b border-white/10 pb-2">
@@ -179,17 +179,17 @@ export default function SignalFeed() {
 
       {/* Main feed */}
       <div className="lg:col-span-9 space-y-6">
-        <TrendChart />
+        <div role="status" className="p-6 border border-slate-200 text-sm text-slate-600">No verified live feed is connected. Sourced market updates will appear after review.</div>
 
         <div className="flex items-center justify-between py-2 border-b border-slate-200">
           <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-            {filtered.length} Signal{filtered.length !== 1 ? 's' : ''} — Active Stream
+            {filtered.length} Signal{filtered.length !== 1 ? 's' : ''} — Reviewed Signals
           </div>
-          <div className="text-[10px] text-slate-400">Last updated: just now</div>
+          <div className="text-[10px] text-slate-400">Last updated: unavailable</div>
         </div>
 
         {filtered.length === 0 ? (
-          <div className="py-16 text-center text-slate-400 text-sm">No signals match current filters.</div>
+          <div className="py-16 text-center text-slate-400 text-sm">No verified signals are currently published.</div>
         ) : (
           <div className="space-y-4">
             {filtered.map(signal => (

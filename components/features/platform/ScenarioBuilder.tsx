@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { InfraRequirement, MatchResult, CoolingType, TierLevel } from '@/types';
 import { runScoring, DEFAULT_REQUIREMENT } from '@/lib/scoring';
 import CandidateCard from './CandidateCard';
@@ -38,6 +38,17 @@ type SortKey = 'fitScore' | 'dataConfidence' | 'costPerKwMonth' | 'availableMont
 
 export default function ScenarioBuilder() {
   const [req, setReq] = useState<InfraRequirement>({ ...DEFAULT_REQUIREMENT });
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const mw = Number(p.get('mw')), months = Number(p.get('timeline')), region = p.get('region');
+    if (!p.has('mw') && !p.has('timeline') && !region) return;
+    setReq(old => ({
+      ...old,
+      ...(p.has('mw') && Number.isFinite(mw) && mw>0 ? {powerMinMW:mw,powerMaxMW:Math.max(mw,old.powerMaxMW)} : {}),
+      ...(p.has('timeline') && Number.isFinite(months) && months>=1 ? {timelineMonths:months} : {}),
+      ...(region && REGIONS.some(x=>x.code===region)?{geography:[region]}:{})
+    }));
+  }, []);
   const [results, setResults] = useState<MatchResult[]>([]);
   const [selected, setSelected] = useState<MatchResult | null>(null);
   const [hasRun, setHasRun] = useState(false);

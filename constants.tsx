@@ -65,21 +65,14 @@ export const FAIL_POINTS = [
   { title: 'Expansion Blind Spots', desc: 'Phase 1 is viable. Phase 2 is impossible.' },
 ];
 
+// Educational context, not real-time market statistics.
 export const TICKER_SIGNALS = [
-  { category: 'MARKET', signal: 'US Operating Data Centers: 577' },
-  { category: 'CAPACITY', signal: 'US Operating Capacity: 14,187 MW' },
-  { category: 'PLANNED', signal: 'US Planned Projects: 668' },
-  { category: 'EXPANSION', signal: 'Planned Additional US Capacity: 184,000+ MW' },
-  { category: 'GLOBAL', signal: 'Global Data Center Expansion 2026–2030: 100+ GW' },
-  { category: 'DEMAND', signal: 'AI workloads driving double-digit annual capacity growth' },
-  { category: 'POLICY', signal: 'Hyperscale demand now shaping regional grid policy' },
-  { category: 'GRID', signal: 'Interconnect queues extending timelines in major US markets' },
-  { category: 'REALITY', signal: 'MW without interconnect ≠ deliverable capacity' },
-  { category: 'RISK', signal: 'Stranded capacity risk increasing in oversubscribed markets' },
-  { category: 'TIMELINE', signal: 'Typical Construction Phase: 18–30 months' },
-  { category: 'ENERGY', signal: 'Baseload energy becoming strategic priority' },
+ {category:'GRID',signal:'Power-delivery claims require direct utility evidence'},
+ {category:'MARKET',signal:'Facility discovery is not confirmed available inventory'},
+ {category:'RISK',signal:'Commissioning timelines require operator confirmation'},
+ {category:'LICENSING',signal:'Market signals are published only with approved source rights'},
+ {category:'DILIGENCE',signal:'Every verified claim needs provenance and an observation date'}
 ];
-
 export const SECURITY_STATS = [
   { name: 'Mon', mitigated: 400, detected: 600 },
   { name: 'Tue', mitigated: 300, detected: 500 },

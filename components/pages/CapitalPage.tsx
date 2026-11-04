@@ -173,10 +173,10 @@ export default function CapitalPage() {
       <section className="container mx-auto px-6 mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border border-slate-200">
           {[
-            { value: `${DILIGENCE_REPORTS.length}`, label: 'Assets Under Review' },
+            { value: `${DILIGENCE_REPORTS.length}`, label: 'Illustrative Reports' },
             { value: '87', label: 'Avg Feasibility Score' },
             { value: '100%', label: 'Grid-First Methodology' },
-            { value: '< 45 Days', label: 'Diligence Cycle' },
+            { value: 'Case-by-case', label: 'Delivery Timeline' },
           ].map(({ value, label }) => (
             <div key={label} className="bg-white p-8">
               <div className="text-3xl font-black text-navy mb-1">{value}</div>
@@ -189,7 +189,7 @@ export default function CapitalPage() {
       {/* Diligence dashboard */}
       <section className="container mx-auto px-6">
         <div className="mb-8">
-          <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Asset Diligence Dashboard</div>
+          <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Fictional Sample Dossiers — Not Live Clients</div>
           <h2 className="text-2xl font-black text-navy uppercase tracking-tighter">Active Coverage</h2>
         </div>
         <div className="flex flex-col lg:flex-row gap-6">

@@ -152,14 +152,14 @@ function QuickIntakeForm() {
         </div>
       </div>
       <Link
-        href={`/platform`}
+        href={`/platform?mw=${encodeURIComponent(mw)}&region=${encodeURIComponent(region)}&timeline=${encodeURIComponent(timeline)}`}
         className="flex items-center justify-between px-6 py-3.5 bg-navy text-white font-black uppercase tracking-widest text-[10px] hover:bg-orange-accent transition-colors w-full"
       >
         <span>Run Full Infra-Align™ Model</span>
         <ArrowRight size={14} />
       </Link>
       <div className="text-[9px] text-slate-400 text-center">
-        Full scoring engine · 7 live candidates · Exportable results
+        Demo only · no verified live offers or exports
       </div>
     </div>
   );
@@ -372,7 +372,7 @@ export default function HomePage() {
                 Model Your <span className="text-orange-accent">Requirements.</span>
               </h2>
               <p className="text-lg text-slate-500 font-light leading-relaxed">
-                Enter basic parameters below to run a quick match — or use the full platform for weighted scoring,
+                Enter basic parameters to prepare your model — verified matching depends on evidence-backed capacity, not illustrations; the full platform offers weighted scoring,
                 constraint analysis, and candidate explainability.
               </p>
               <QuickIntakeForm />
@@ -380,7 +380,7 @@ export default function HomePage() {
 
             <div className="space-y-4">
               <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-4">
-                Sample Infra-Align™ Output — 10 MW · NOVA · 12 months
+                Fictional sample output — no real availability represented
               </div>
               {SAMPLE_RESULTS.map((r) => (
                 <div

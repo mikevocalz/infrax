@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ShieldCheck, HeartPulse, Building, ShoppingBag, Landmark, ArrowUpRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -10,40 +11,11 @@ interface Industry {
 }
 
 const INDUSTRIES: Industry[] = [
-  {
-    title: 'Healthcare',
-    icon: HeartPulse,
-    iconClass: 'w-12 h-12 text-orange-accent',
-    description:
-      'Securing patient data and medical infrastructure with HIPAA-compliant SOC services and continuous threat monitoring.',
-    metrics: ['100% HIPAA Compliance', '24/7 Endpoint Protection', 'Rapid Incident Containment'],
-  },
-  {
-    title: 'Finance & Banking',
-    icon: Landmark,
-    iconClass: 'w-12 h-12 text-navy',
-    description:
-      'Military-grade defense for financial transactions and sensitive institutional data against sophisticated cyber adversaries.',
-    metrics: ['Zero-Trust Architecture', 'Real-time Fraud Detection', 'Regulatory Audit Readiness'],
-  },
-  {
-    title: 'Retail & E-commerce',
-    icon: ShoppingBag,
-    iconClass: 'w-12 h-12 text-orange-accent',
-    description:
-      'Protecting consumer trust and payment infrastructure during peak traffic and high-volume transaction periods.',
-    metrics: ['PCI-DSS Alignment', 'DDOS Mitigation', 'Supply Chain Security'],
-  },
-  {
-    title: 'Public Sector',
-    icon: Building,
-    iconClass: 'w-12 h-12 text-navy',
-    description:
-      'Sovereign cybersecurity for government agencies, ensuring the integrity of public services and citizen data.',
-    metrics: ['NIST Framework Integration', 'Secure Cloud Operations', 'Multi-Agency SOC'],
-  },
+{title:'AI / HPC Enterprises',icon:HeartPulse,iconClass:'w-12 h-12 text-orange-accent',description:'Assess power, GPU density, cooling feasibility, timing and network diversity against real constraints.',metrics:['IT MW and delivered power','Cooling and network requirements','Evidence-backed candidate evaluation']},
+{title:'Data Center Developers',icon:Building,iconClass:'w-12 h-12 text-navy',description:'Evaluate planned facilities, secured utility service, permits and authorized capacity-offer details.',metrics:['Site feasibility','Capacity attestations','Market and grid screening']},
+{title:'Infrastructure Investors',icon:Landmark,iconClass:'w-12 h-12 text-orange-accent',description:'Review power rights, commercial assumptions and project milestones before capital commitments.',metrics:['Utility diligence','Development risk review','Assumptions and source register']},
+{title:'Public Sector',icon:ShoppingBag,iconClass:'w-12 h-12 text-navy',description:'Understand energy, land, resilience and economic-development tradeoffs within local regulatory settings.',metrics:['Grid and land screening','Infrastructure policy research','Stakeholder planning']}
 ];
-
 export default function SolutionsPage() {
   return (
     <div className="pt-40 bg-white">
@@ -51,15 +23,14 @@ export default function SolutionsPage() {
         {/* Header */}
         <div className="grid lg:grid-cols-2 gap-20 items-end max-w-6xl mx-auto">
           <div className="space-y-6">
-            <div className="section-label">Tailored Defense</div>
+            <div className="section-label">Infrastructure Applications</div>
             <h1 className="text-5xl md:text-8xl font-black text-navy uppercase tracking-tighter leading-[0.85]">
               INDUSTRY <br />
               <span className="text-orange-accent">SOLUTIONS.</span>
             </h1>
           </div>
           <p className="text-xl md:text-2xl text-slate-500 font-light leading-relaxed">
-            Every industry faces unique threats. InfraX provides specialized infrastructure frameworks designed for the
-            specific regulatory and technical challenges of your sector.
+            Infrastructure decisions change by buyer and use case. Choose the feasibility and advisory path aligned with your goals.
           </p>
         </div>
 
@@ -90,10 +61,10 @@ export default function SolutionsPage() {
                   ))}
                 </div>
 
-                <button className="flex items-center justify-between w-full text-[10px] font-black uppercase tracking-[0.2em] text-navy group-hover:text-orange-accent transition-all border-t border-navy/10 pt-8">
-                  <span>View Full Roadmap</span>
+                <Link href="/contact" className="flex items-center justify-between w-full text-[10px] font-black uppercase tracking-[0.2em] text-navy group-hover:text-orange-accent transition-all border-t border-navy/10 pt-8">
+                  <span>Discuss Feasibility</span>
                   <ArrowUpRight className="w-5 h-5" />
-                </button>
+                </Link>
               </div>
             );
           })}
@@ -104,17 +75,16 @@ export default function SolutionsPage() {
           <div className="max-w-4xl relative z-10 space-y-8">
             <ShieldCheck className="w-16 h-16 text-orange-accent" />
             <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-none">
-              The Zero-Trust <br />Foundation.
+              Evidence-Led <br />Decisions.
             </h2>
             <p className="text-xl text-white/60 font-light leading-relaxed">
-              Regardless of industry, we implement a comprehensive Zero-Trust framework. We never trust, always verify,
-              ensuring that your perimeter is not your only line of defense.
+              Public grid data is not proof of sellable capacity. InFraX separates reported indicators from confirmed operator offers and unresolved feasibility risks.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10">
-              {['Identity', 'Endpoints', 'Data', 'Apps'].map((item) => (
+              {['Power', 'Cooling', 'Location', 'Delivery'].map((item) => (
                 <div key={item}>
                   <div className="text-2xl font-black text-white">{item}</div>
-                  <div className="text-[10px] text-orange-accent font-bold uppercase mt-2">Verified</div>
+                  <div className="text-[10px] text-orange-accent font-bold uppercase mt-2">Evaluated</div>
                 </div>
               ))}
             </div>
