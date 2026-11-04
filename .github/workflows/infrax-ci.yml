@@ -1,0 +1,40 @@
+name: InFraX cross-platform source gates
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  web-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+  source-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Static route and false-claims checks
+        run: node scripts/check-public-contracts.mjs
+      - name: Node source tests if present
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(find lib -type f -name '*.test.mjs' 2>/dev/null | sort)
+          if (( ${#files[@]} == 0 )); then
+            echo "No source unit tests on this branch"
+          else
+            node --test "${files[@]}"
+          fi
