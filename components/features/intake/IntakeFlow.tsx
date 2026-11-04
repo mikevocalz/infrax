@@ -69,6 +69,28 @@ export default function IntakeFlow() {
   const [step, setStep] = useState<Step>('type');
   const [form, setForm] = useState<FormData>(EMPTY);
   const [submitted, setSubmitted] = useState(false);
+  const [receiptId, setReceiptId] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  async function submitIntake() {
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmissionError(null);
+    try {
+      const response = await fetch('/api/v1/intake', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({...form, consent:true}),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.receiptId) throw new Error(result.error || 'Request could not be saved.');
+      setReceiptId(result.receiptId);
+      setSubmitted(true);
+    } catch (error) {
+      setSubmissionError(error instanceof Error ? error.message : 'Submission failed. Please retry.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   function update(key: keyof FormData, val: unknown) {
     setForm(prev => ({ ...prev, [key]: val }));
@@ -89,17 +111,18 @@ export default function IntakeFlow() {
         </div>
         <div className="space-y-4">
           <div className="text-3xl font-black text-navy uppercase tracking-tighter">Request Received</div>
+          {receiptId && <p className="font-mono text-sm text-navy" aria-label="Request reference">Reference: {receiptId}</p>}
           <p className="text-slate-500 font-light leading-relaxed">
-            Your infrastructure intake has been logged. An InfraX analyst will respond within one business day to schedule an initial scoping call.
+            Your infrastructure request has been saved. Keep the reference number for your records. Our team can follow up after reviewing your requirements.
           </p>
         </div>
         <div className="p-6 bg-slate-50 border border-slate-200 text-left space-y-3">
           <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">What Happens Next</div>
           {[
-            'Analyst reviews your requirements (1 business day)',
-            'Scoping call to validate constraints and priorities',
-            'Infra-Align™ modeling initiated within 3 business days',
-            'Scored candidate shortlist delivered within 7 business days',
+            'Our team reviews your submitted requirements',
+            'We may request additional engineering details',
+            'A scoping discussion may be scheduled',
+            'Verified options are shared only after source evidence is assessed',
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-3 text-sm text-slate-600">
               <div className="w-5 h-5 bg-navy text-white flex items-center justify-center text-[9px] font-black flex-shrink-0 mt-0.5">{i + 1}</div>
@@ -338,15 +361,18 @@ export default function IntakeFlow() {
         </div>
 
         <div className="p-4 bg-navy/5 border border-navy/10 text-[10px] text-slate-500 leading-relaxed">
-          By submitting, you agree that InfraX will use this information solely to scope and respond to your infrastructure inquiry. All data is handled under strict confidentiality.
+          By submitting, you authorize InFraX to process your contact information and stated requirements to respond to this inquiry. Do not provide confidential engineering documents through this public form.
         </div>
       </div>
 
+      {submissionError && <p role="alert" className="text-red-700 text-sm">{submissionError}</p>}
       <button
-        onClick={() => setSubmitted(true)}
-        className="w-full py-5 bg-orange-accent text-white font-black uppercase tracking-widest hover:bg-[#d95d12] transition-colors"
+        onClick={submitIntake}
+        disabled={submitting}
+        aria-busy={submitting}
+        className="w-full py-5 bg-orange-accent text-white font-black uppercase tracking-widest hover:bg-[#d95d12] transition-colors disabled:opacity-50"
       >
-        Submit Intake Request
+        {submitting ? 'Submitting securely…' : 'Submit Intake Request'}
       </button>
     </div>
   );
