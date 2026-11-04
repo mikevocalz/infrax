@@ -29,7 +29,7 @@ export default function ExecutionPage() {
             <span className="text-orange-accent">Aligned.</span>
           </h1>
           <p className="text-lg md:text-2xl text-slate-500 font-light leading-relaxed max-w-2xl">
-            InfraX executes based on modeled feasibility — not inventory. Every mandate follows the same disciplined lifecycle.
+            The phases below illustrate a proposed engagement lifecycle, not active or completed client work.
           </p>
         </div>
       </section>
@@ -41,7 +41,7 @@ export default function ExecutionPage() {
             <div className="absolute inset-0 industrial-grid-dark opacity-10" />
             <div className="relative z-10 grid lg:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <div className="text-[10px] font-black uppercase tracking-widest text-orange-accent">Active Phase</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-orange-accent">Example Phase</div>
                 <div className="text-3xl font-black uppercase tracking-tighter">{activePhase.label}</div>
                 <div className="text-white/60 font-light">{activePhase.description}</div>
               </div>
@@ -117,7 +117,7 @@ export default function ExecutionPage() {
           <div className="p-10 bg-slate-50 border border-slate-200 space-y-6">
             <h3 className="text-xl font-black text-navy uppercase tracking-tight">Start an Engagement</h3>
             <p className="text-slate-500 font-light text-sm leading-relaxed">
-              Submit your infrastructure requirements and InfraX will initiate a structured execution mandate within one business day.
+              Submit your requirements to discuss scope; the work begins only when a project engagement is agreed.
             </p>
             <a href="/contact" className="inline-block px-8 py-4 bg-navy text-white font-black uppercase tracking-widest hover:bg-orange-accent transition-colors text-[10px]">
               Submit Requirements
