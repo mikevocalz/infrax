@@ -1,0 +1,29 @@
+{
+  "name": "@infrax/cms",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24.22.1"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "payload": "payload",
+    "migrate": "payload migrate",
+    "migrate:create": "payload migrate:create"
+  },
+  "dependencies": {
+    "payload": "4.0.0-beta.6",
+    "@payloadcms/db-postgres": "4.0.0-beta.6",
+    "@payloadcms/richtext-lexical": "4.0.0-beta.6",
+    "@payloadcms/next": "4.0.0-beta.6",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0"
+  }
+}
