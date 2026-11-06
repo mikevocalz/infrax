@@ -1,26 +1,18 @@
 name: InFraX public UX audit (no deployment)
 on:
   pull_request:
-    paths:
-      - 'app/**'
-      - 'components/**'
-      - 'client/**'
-      - 'lib/ux/**'
-      - 'scripts/ux/**'
-      - 'constants.tsx'
-      - '.github/workflows/infrax-ux.yml'
-permissions:
-  contents: read
+    paths: ['app/**', 'components/**', 'client/**', 'lib/ux/**', 'scripts/ux/**', 'constants.tsx', '.github/workflows/infrax-ux.yml']
+permissions: {contents: read}
 jobs:
   source:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
-      - name: Archive tracked non-secret implementation for audit
+      - name: Archive implementation without secrets or credentials
         run: |
           mkdir -p ux-source
-          git archive HEAD app components client lib cms backend scripts types constants.tsx package.json package-lock.json tsconfig.json next.config.ts tailwind.config.ts postcss.config.mjs vercel.json > ux-source/implementation.tar
+          git archive HEAD app components client lib cms backend services types.ts constants.tsx package.json package-lock.json payload.config.ts tsconfig.json next.config.ts tailwind.config.ts postcss.config.mjs vercel.json > ux-source/implementation.tar
       - uses: actions/upload-artifact@v4
         with: {name: ux-source, path: ux-source/, retention-days: 1}
   browser:
