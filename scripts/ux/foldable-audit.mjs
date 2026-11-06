@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {PUBLIC_ROUTES} from '../../lib/ux/navigation.mjs';
 const browser=await chromium.launch(), origin='http://127.0.0.1:3000';
-const report={scope:'Public web only; emulated display features are test inputs, not observed hardware',checks:[],interactions:[],failures:[]};
+const report={scope:'Public web only; CDP emulated display features, not physical hardware',checks:[],interactions:[],failures:[]};
 const check=(ok,msg)=>{if(!ok)report.failures.push(msg);};
 try {
  for(const spec of [
@@ -13,25 +13,26 @@ try {
   {id:'phone-landscape',width:844,height:390},
   {id:'compact-text-200',width:390,height:844,text:true},
  ]) {
-  const context=await browser.newContext({viewport:{width:spec.width,height:spec.height},reducedMotion:'reduce'});
+  const context=await browser.newContext({viewport:{width:spec.width,height:spec.height},isMobile:Boolean(spec.orientation),hasTouch:Boolean(spec.orientation),reducedMotion:'reduce'});
   const page=await context.newPage();page.on('pageerror',e=>report.failures.push(spec.id+': '+e.message));
   const session=await context.newCDPSession(page);
-  if(spec.orientation){
-   await session.send('Emulation.setDeviceMetricsOverride',{width:spec.width,height:spec.height,deviceScaleFactor:1,mobile:false,screenWidth:spec.width,screenHeight:spec.height});
-   await session.send('Emulation.setDisplayFeaturesOverride',{features:[{orientation:spec.orientation,offset:spec.offset,maskLength:spec.maskLength}]});
-   await session.send('Emulation.setDevicePostureOverride',{posture:{type:'folded'}});
-  }
-  for(const route of PUBLIC_ROUTES){
-   const response=await page.goto(origin+route,{waitUntil:'networkidle'});
+  const emulate=async()=>{
+   if(spec.orientation){
+    // Atomic documented metrics override keeps its display feature with the mobile viewport.
+    await session.send('Emulation.setDeviceMetricsOverride',{width:spec.width,height:spec.height,deviceScaleFactor:1,mobile:true,screenWidth:spec.width,screenHeight:spec.height,displayFeature:{orientation:spec.orientation,offset:spec.offset,maskLength:spec.maskLength},devicePosture:{type:'folded'}});
+    await page.waitForFunction(axis=>matchMedia(axis==='vertical'?'(horizontal-viewport-segments:2)':'(vertical-viewport-segments:2)').matches,spec.orientation,{timeout:5000});
+   }
    if(spec.text)await page.addStyleTag({content:'html{font-size:200%!important}'});
+  };
+  for(const route of PUBLIC_ROUTES){
+   const response=await page.goto(origin+route,{waitUntil:'networkidle'});await emulate();
    const result=await page.evaluate(()=>({width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth+1,h1:document.querySelectorAll('h1').length,book:matchMedia('(horizontal-viewport-segments:2)').matches,tabletop:matchMedia('(vertical-viewport-segments:2)').matches,body:document.body.getBoundingClientRect().toJSON(),header:document.querySelector('header').getBoundingClientRect().toJSON()}));
    check(response.status()===200,spec.id+route+' HTTP');check(result.h1===1,spec.id+route+' H1');check(!result.overflow,spec.id+route+' horizontal overflow');
-   if(spec.orientation==='vertical'){check(result.book,spec.id+' emulation inactive');check(result.body.right<=spec.offset+1,spec.id+route+' content crosses hinge');check(result.header.right<=spec.offset+1,spec.id+route+' header crosses hinge');}
-   if(spec.orientation==='horizontal'){check(result.tabletop,spec.id+' emulation inactive');check(result.body.bottom<=spec.offset+1,spec.id+route+' reading area crosses hinge');}
+   if(spec.orientation==='vertical'){check(result.body.right<=spec.offset+1,spec.id+route+' content crosses hinge');check(result.header.right<=spec.offset+1,spec.id+route+' header crosses hinge');}
+   if(spec.orientation==='horizontal')check(result.body.bottom<=spec.offset+1,spec.id+route+' reading area crosses hinge');
    report.checks.push({case:spec.id,route,status:response.status(),...result});
   }
-  await page.goto(origin+'/contact?audience=operator',{waitUntil:'networkidle'});
-  if(spec.text)await page.addStyleTag({content:'html{font-size:200%!important}'});
+  await page.goto(origin+'/contact?audience=operator',{waitUntil:'networkidle'});await emulate();
   await page.getByLabel('Full name').fill('Layout test retained');
   await page.getByRole('button',{name:'Menu',exact:true}).click();await page.waitForSelector('dialog[open]');
   const bounds=await page.locator('dialog[open]').boundingBox();
@@ -44,8 +45,7 @@ try {
   if(spec.orientation){await session.send('Emulation.clearDisplayFeaturesOverride');await session.send('Emulation.clearDevicePostureOverride');await session.send('Emulation.clearDeviceMetricsOverride');}
   await page.setViewportSize({width:390,height:844});
   check(await page.getByLabel('Full name').inputValue()==='Layout test retained','draft lost on unfold/resize '+spec.id);
-  report.interactions.push({case:spec.id,drawer:'tested',draftAfterResize:'retained'});
-  await context.close();
+  report.interactions.push({case:spec.id,drawer:'tested',draftAfterResize:'retained'});await context.close();
  }
 } catch(error){report.failures.push(error.stack??String(error));}
 finally{fs.mkdirSync('ux-results',{recursive:true});fs.writeFileSync('ux-results/foldable-audit.json',JSON.stringify(report,null,2));await browser.close();}
