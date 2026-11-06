@@ -1,0 +1,31 @@
+/* Public reading/form surface: one measured region, never text across a hinge.
+ * Application list/detail multi-pane composition belongs to the native shared shell.
+ * No width/device-name heuristic manufactures a hinge. Unknown browsers retain normal reflow.
+ */
+@media (horizontal-viewport-segments: 2), (vertical-viewport-segments: 2) {
+  :root { --ix-header:68px; --ix-pane-width:env(viewport-segment-width 0 0); --ix-pane-left:env(viewport-segment-left 0 0); --ix-pane-top:env(viewport-segment-top 0 0); --ix-pane-height:env(viewport-segment-height 0 0); }
+  body { width:var(--ix-pane-width); max-width:var(--ix-pane-width); margin-left:var(--ix-pane-left); }
+  .ix-header { left:var(--ix-pane-left); right:auto; width:var(--ix-pane-width); }
+  .ix-header-inner { padding-inline:20px; gap:12px; }
+  .ix-desktop-nav,.ix-account-link,.ix-header-cta { display:none; }
+  .ix-menu-toggle { display:flex; }
+  .ix-container { width:calc(100% - 40px); }
+  .ix-home-grid,.ix-sections,.ix-sections--process,.ix-sections--glossary,.ix-role-grid,.ix-team>div { grid-template-columns:minmax(0,1fr); }
+  .ix-home-grid { gap:28px; }
+  .ix-home-hero,.ix-page-hero { padding-block:40px; }
+  .ix-home-hero h1,.ix-page-hero h1 { font-size:clamp(2rem,4vw,2.75rem); }
+  .ix-decision-path { padding-left:0; border-left:0; }
+  .ix-next-step { flex-direction:column; align-items:flex-start; gap:20px; }
+  .ix-hero-actions { flex-direction:column; align-items:stretch; }
+  .ix-footer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ix-footer-grid>div { grid-column:1/-1; }
+  .ix-footer-meta { flex-direction:column; align-items:flex-start; }
+  .ix-drawer { inset:auto; left:calc(var(--ix-pane-left) + max(0px,var(--ix-pane-width) - 448px)); top:var(--ix-pane-top); width:min(448px,var(--ix-pane-width)); max-width:var(--ix-pane-width); height:var(--ix-pane-height); max-height:var(--ix-pane-height); }
+}
+@media (vertical-viewport-segments: 2) {
+  html { height:100%; overflow:hidden; }
+  body { height:var(--ix-pane-height); min-height:0!important; overflow-y:auto; overscroll-behavior:contain; }
+}
+/* Content must wrap, not widen the page, with user text enlargement or long identifiers. */
+.ix-page-body,.ix-section,.ix-trust-note,.ix-next-step,.ix-footer-grid>* { min-width:0; overflow-wrap:anywhere; }
+@media (max-height:480px) { .ix-drawer-top { position:static; } .ix-drawer { padding-block:12px; } }

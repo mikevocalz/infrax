@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import '@/components/ui/foldable.css';
 import Header from '@/components/Header';
 import Footer from '@/components/layout/Footer';
 const inter = Inter({subsets:['latin'],weight:['300','400','500','600','700','800'],variable:'--font-inter',display:'swap'});

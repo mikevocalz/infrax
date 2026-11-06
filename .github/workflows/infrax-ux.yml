@@ -51,7 +51,7 @@ jobs:
         run: |
           npm install --prefix /tmp/infrax-ux-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
           /tmp/infrax-ux-tools/node_modules/.bin/playwright install --with-deps chromium
-      - name: Browser audit of public pages only
+      - name: Browser audit of public pages and measured foldable geometry
         run: |
           set -euo pipefail
           mkdir -p ux-results
@@ -65,6 +65,7 @@ jobs:
           done
           if [ "$ready" != true ]; then tail -100 /tmp/infrax-ux-server.log; exit 1; fi
           node scripts/ux/browser-audit.mjs
+          node scripts/ux/foldable-audit.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: ux-results, path: ux-results/, retention-days: 3}
