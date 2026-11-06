@@ -1,0 +1,108 @@
+name: InFraX public UX audit (no deployment)
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'client/**'
+      - 'lib/ux/**'
+      - 'scripts/ux/**'
+      - 'constants.tsx'
+      - '.github/workflows/infrax-ux.yml'
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
+      - name: Archive tracked non-secret implementation for audit
+        run: |
+          mkdir -p ux-source
+          git archive HEAD app components client lib cms backend scripts types constants.tsx package.json package-lock.json tsconfig.json next.config.ts tailwind.config.ts postcss.config.mjs vercel.json > ux-source/implementation.tar
+      - uses: actions/upload-artifact@v4
+        with: {name: ux-source, path: ux-source/, retention-days: 1}
+  browser:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18
+        env: {POSTGRES_USER: postgres, POSTGRES_PASSWORD: ux-ci-only, POSTGRES_DB: infrax}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d infrax"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      CI: 'true'
+      INFRAX_CMS_TEST_MODE: '1'
+      APP_ENV: development
+      INFRAX_CMS_DATABASE_URL: postgresql://postgres:ux-ci-only@127.0.0.1:5432/infrax
+      INFRAX_PUBLIC_ORIGIN: http://127.0.0.1:3000
+      INFRAX_AUTH_BASE_URL: http://127.0.0.1:3000/api/auth
+      INFRAX_ALLOW_SIGNUP: 'false'
+      PAYLOAD_SECRET: ux-ci-only-payload-secret-not-valid-in-customer-environments
+      BETTER_AUTH_SECRET: ux-ci-only-auth-secret-not-valid-in-customer-environments
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm --prefix backend ci --ignore-scripts --no-audit --no-fund
+      - run: npm run cms:importmap && npm run cms:types
+      - name: Prepare disposable CMS only
+        run: |
+          node --input-type=module <<'NODE'
+          import pg from 'pg';
+          const u=new URL(process.env.INFRAX_CMS_DATABASE_URL);
+          if(u.hostname!=='127.0.0.1'||process.env.CI!=='true')throw Error('Disposable database required');
+          const c=new pg.Client({connectionString:u.href});await c.connect();
+          try{await c.query('CREATE SCHEMA IF NOT EXISTS cms');}finally{await c.end();}
+          NODE
+          npm run cms:migrate
+      - run: npm run typecheck && npm run build
+      - name: Install isolated browser audit tools
+        run: |
+          npm install --prefix /tmp/infrax-ux-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+          /tmp/infrax-ux-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Browser audit of public pages only
+        run: |
+          set -euo pipefail
+          mkdir -p ux-results
+          npm run start -- --hostname 127.0.0.1 > /tmp/infrax-ux-server.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then break; fi
+            sleep 2
+          done
+          if [ -f scripts/ux/browser-audit.mjs ]; then
+            node scripts/ux/browser-audit.mjs
+          else
+            node --input-type=module <<'NODE'
+            import {chromium} from '/tmp/infrax-ux-tools/node_modules/playwright/index.mjs';
+            import fs from 'node:fs';
+            const browser=await chromium.launch();
+            const routes=['/','/platform','/services','/solutions','/intelligence','/metrics','/capital','/execution','/partners','/about','/why-infrax','/contact'];
+            const report=[];
+            for(const width of [390,1440]){
+              const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
+              for(const route of routes){
+                const response=await page.goto('http://127.0.0.1:3000'+route,{waitUntil:'networkidle'});
+                const data=await page.evaluate(()=>({title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.textContent),overflow:document.documentElement.scrollWidth>innerWidth+1,links:[...document.querySelectorAll('a')].map(a=>({text:a.textContent,href:a.getAttribute('href')})),buttons:[...document.querySelectorAll('button')].map(b=>({text:b.textContent,disabled:b.disabled})),text:document.body.innerText}));
+                report.push({route,width,status:response.status(),...data});
+                if(['/','/solutions','/contact'].includes(route))await page.screenshot({path:'ux-results/baseline-'+(route.replaceAll('/','')||'home')+'-'+width+'.png',fullPage:true});
+              }
+              await page.close();
+            }
+            fs.writeFileSync('ux-results/baseline.json',JSON.stringify(report,null,2));
+            await browser.close();
+            NODE
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: ux-results, path: ux-results/, retention-days: 3}
