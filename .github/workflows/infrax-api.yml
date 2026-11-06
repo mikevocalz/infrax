@@ -52,6 +52,16 @@ jobs:
           if ! find cms/migrations -maxdepth 1 -name '*_*.ts' 2>/dev/null | grep -q .; then
             npm run payload -- migrate:create initial_auth_editorial --force-accept-warning
           fi
+      - name: Create namespace in disposable CI database only
+        run: |
+          node --input-type=module <<'NODE'
+          import pg from 'pg';
+          const url=new URL(process.env.INFRAX_CMS_DATABASE_URL);
+          if(process.env.INFRAX_CMS_TEST_MODE!=='1'||process.env.CI!=='true'||url.hostname!=='127.0.0.1')throw new Error('Not disposable CI');
+          const client=new pg.Client({connectionString:url.toString()});
+          await client.connect();
+          try{await client.query('CREATE SCHEMA IF NOT EXISTS cms');}finally{await client.end();}
+          NODE
       - name: Apply generated migrations to disposable database
         run: npm run cms:migrate
       - run: npm run typecheck
@@ -71,7 +81,7 @@ jobs:
             sleep 2
           done
           if [ "$ready" != true ]; then tail -100 /tmp/infrax-server.log; exit 1; fi
-          npm run test:cms:http
+          npm run test:cms:http || { tail -100 /tmp/infrax-server.log; exit 1; }
       - name: Collect generated non-secret files
         run: |
           mkdir -p generated/cms generated/app/'(payload)'/admin
