@@ -3,10 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "predev": "npm --prefix backend ci --ignore-scripts --no-audit --no-fund",
     "dev": "next dev",
+    "prebuild": "npm --prefix backend ci --ignore-scripts --no-audit --no-fund",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:backend": "node --test backend/*.test.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.38.0",
