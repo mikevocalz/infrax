@@ -1,0 +1,35 @@
+name: InFraX bounded public source collection (no deployment)
+on:
+  pull_request:
+    paths:
+      - 'scripts/ingestion/collect-public-pilot.py'
+      - 'scripts/ingestion/test_public_pilot.py'
+      - '.github/workflows/infrax-public-data.yml'
+permissions:
+  contents: read
+concurrency:
+  group: infrax-public-data-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'feat/infrax-runtime-integration-20261106'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Validate parser, redaction and unit boundaries
+        run: python -m unittest discover -s scripts/ingestion -p 'test_*.py' -v
+      - name: Collect bounded official public data only
+        run: python scripts/ingestion/collect-public-pilot.py --output public-pilot
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: infrax-public-pilot
+          path: public-pilot/
+          retention-days: 3
+          if-no-files-found: error
