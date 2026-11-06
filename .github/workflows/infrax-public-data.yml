@@ -2,8 +2,7 @@ name: InFraX bounded public source collection (no deployment)
 on:
   pull_request:
     paths:
-      - 'scripts/ingestion/collect-public-pilot.py'
-      - 'scripts/ingestion/test_public_pilot.py'
+      - 'scripts/ingestion/**'
       - '.github/workflows/infrax-public-data.yml'
 permissions:
   contents: read
@@ -22,10 +21,14 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - name: Validate parser, redaction and unit boundaries
+      - name: Validate parsers, redaction and import boundaries
         run: python -m unittest discover -s scripts/ingestion -p 'test_*.py' -v
-      - name: Collect bounded official public data only
-        run: python scripts/ingestion/collect-public-pilot.py --output public-pilot
+      - name: Collect bounded EIA and OSM evidence
+        run: |
+          python scripts/ingestion/collect-public-pilot.py --output public-pilot --source eia
+          python scripts/ingestion/collect-osm-pilot.py --output public-pilot
+      - name: Prepare development-only EIA import for review (does not execute SQL)
+        run: python scripts/ingestion/prepare-pilot-import.py --bundle public-pilot/public-pilot.json --output public-pilot/eia-transaction.json --environment development
       - uses: actions/upload-artifact@v4
         if: always()
         with:
