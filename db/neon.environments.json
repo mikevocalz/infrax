@@ -1,0 +1,45 @@
+{
+  "projectId": "spring-glitter-25305067",
+  "projectName": "InFraX",
+  "organizationId": "org-square-bread-65904028",
+  "region": "aws-us-east-1",
+  "postgresMajor": 18,
+  "database": "infrax",
+  "migrationOwner": "infrax_owner",
+  "schema": "infra",
+  "migrationSchema": "infra_meta",
+  "credentialsCommitted": false,
+  "applicationConnected": false,
+  "productionProtectionEnabled": false,
+  "historyRetentionSeconds": 21600,
+  "verifiedOn": "2026-11-06",
+  "environments": {
+    "production": {
+      "branchId": "br-dry-tree-bcj5zkai",
+      "endpointId": "ep-restless-sky-bcs5wyfg",
+      "directHost": "ep-restless-sky-bcs5wyfg.c-16.us-east-1.aws.neon.tech",
+      "pooledHost": "ep-restless-sky-bcs5wyfg-pooler.c-16.us-east-1.aws.neon.tech",
+      "minComputeUnits": 0.25,
+      "maxComputeUnits": 2,
+      "defaultBranch": true
+    },
+    "staging": {
+      "branchId": "br-empty-smoke-bc899a09",
+      "parentId": "br-dry-tree-bcj5zkai",
+      "endpointId": "ep-raspy-fog-bc1d7jqg",
+      "directHost": "ep-raspy-fog-bc1d7jqg.c-16.us-east-1.aws.neon.tech",
+      "pooledHost": "ep-raspy-fog-bc1d7jqg-pooler.c-16.us-east-1.aws.neon.tech",
+      "minComputeUnits": 0.25,
+      "maxComputeUnits": 1
+    },
+    "development": {
+      "branchId": "br-holy-mode-bcenb3y8",
+      "parentId": "br-empty-smoke-bc899a09",
+      "endpointId": "ep-proud-resonance-bcwlhuyj",
+      "directHost": "ep-proud-resonance-bcwlhuyj.c-16.us-east-1.aws.neon.tech",
+      "pooledHost": "ep-proud-resonance-bcwlhuyj-pooler.c-16.us-east-1.aws.neon.tech",
+      "minComputeUnits": 0.25,
+      "maxComputeUnits": 0.5
+    }
+  }
+}
