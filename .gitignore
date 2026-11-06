@@ -18,6 +18,12 @@ out/
 next-env.d.ts
 tsconfig.tsbuildinfo
 
+# Server secrets (templates remain tracked)
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.*.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
