@@ -18,7 +18,6 @@ try {
   const session=await context.newCDPSession(page);
   const emulate=async()=>{
    if(spec.orientation){
-    // Atomic documented metrics override keeps its display feature with the mobile viewport.
     await session.send('Emulation.setDeviceMetricsOverride',{width:spec.width,height:spec.height,deviceScaleFactor:1,mobile:true,screenWidth:spec.width,screenHeight:spec.height,displayFeature:{orientation:spec.orientation,offset:spec.offset,maskLength:spec.maskLength},devicePosture:{type:'folded'}});
     await page.waitForFunction(axis=>matchMedia(axis==='vertical'?'(horizontal-viewport-segments:2)':'(vertical-viewport-segments:2)').matches,spec.orientation,{timeout:5000});
    }
@@ -39,13 +38,21 @@ try {
   if(spec.orientation==='vertical')check(bounds.x>=0&&bounds.x+bounds.width<=spec.offset+1,'book drawer crosses hinge');
   if(spec.orientation==='horizontal')check(bounds.y>=0&&bounds.y+bounds.height<=spec.offset+1,'tabletop drawer crosses hinge');
   for(let i=0;i<15;i++){await page.keyboard.press('Tab');check(await page.evaluate(()=>document.querySelector('dialog[open]')?.contains(document.activeElement)),'focus escaped '+spec.id);}
-  await page.screenshot({path:'ux-results/'+spec.id+'.png'});
+  // Playwright screenshot preparation can overwrite custom CDP metrics. Capture
+  // directly and assert the measured segment remains active before and after.
+  const captureState=()=>page.evaluate(()=>({book:matchMedia('(horizontal-viewport-segments:2)').matches,tabletop:matchMedia('(vertical-viewport-segments:2)').matches,drawer:document.querySelector('dialog[open]')?.getBoundingClientRect().toJSON()}));
+  const before=await captureState();
+  const capture=await session.send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  fs.writeFileSync('ux-results/'+spec.id+'.png',Buffer.from(capture.data,'base64'));
+  const after=await captureState();
+  if(spec.orientation==='vertical')check(before.book&&after.book&&after.drawer.right<=spec.offset+1,'book screenshot lost segmented geometry');
+  if(spec.orientation==='horizontal')check(before.tabletop&&after.tabletop&&after.drawer.bottom<=spec.offset+1,'tabletop screenshot lost segmented geometry');
   await page.keyboard.press('Escape');
   check(await page.getByLabel('Full name').inputValue()==='Layout test retained','draft lost '+spec.id);
   if(spec.orientation){await session.send('Emulation.clearDisplayFeaturesOverride');await session.send('Emulation.clearDevicePostureOverride');await session.send('Emulation.clearDeviceMetricsOverride');}
   await page.setViewportSize({width:390,height:844});
   check(await page.getByLabel('Full name').inputValue()==='Layout test retained','draft lost on unfold/resize '+spec.id);
-  report.interactions.push({case:spec.id,drawer:'tested',draftAfterResize:'retained'});await context.close();
+  report.interactions.push({case:spec.id,drawer:'tested',bounds,captureBefore:before,captureAfter:after,draftAfterResize:'retained'});await context.close();
  }
 } catch(error){report.failures.push(error.stack??String(error));}
 finally{fs.mkdirSync('ux-results',{recursive:true});fs.writeFileSync('ux-results/foldable-audit.json',JSON.stringify(report,null,2));await browser.close();}
