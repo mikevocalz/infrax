@@ -1,5 +1,6 @@
 'use client';
-import {useRef} from 'react';
+import {useEffect,useRef} from 'react';
+import {contactIntent} from '@/lib/ux/navigation.mjs';
 import {createStore} from 'zustand/vanilla';
 import {useStore} from 'zustand';
 import {createInfraXClient,createIntakeSubmission,errorMessage} from '@/client/api.mjs';
@@ -11,13 +12,14 @@ export default function IntakeFlow(){
  const storeRef=useRef<ReturnType<typeof makeStore>|null>(null);if(!storeRef.current)storeRef.current=makeStore();const store=storeRef.current;
  const sender=useRef<ReturnType<typeof createIntakeSubmission>|null>(null);if(!sender.current)sender.current=createIntakeSubmission(createInfraXClient());
  const state=useStore(store);const form=state.draft;
+ useEffect(()=>{const role=contactIntent(window.location.search);if(role&&!store.getState().attempted)store.setState(s=>({draft:{...s.draft,userType:role}}));},[store]);
  const update=(key:keyof Draft,value:string|boolean)=>{if(!store.getState().attempted)store.setState(s=>({draft:{...s.draft,[key]:value},error:''}));};
- const submit=async()=>{if(store.getState().pending)return;store.setState({pending:true,attempted:true,error:''});try{const result=await sender.current!.submit(store.getState().draft);store.setState({receipt:result.receiptId});}catch(e){store.setState({error:errorMessage(e)});}finally{store.setState({pending:false});}};
+ const submit=async()=>{if(store.getState().pending)return;store.setState({pending:true,attempted:true,error:''});try{const result=await sender.current!.submit(store.getState().draft);store.setState({receipt:result.receiptId});}catch(e){const attempted=sender.current!.attempted;store.setState({error:errorMessage(e),attempted,...(!attempted?{reviewing:false}:{})});}finally{store.setState({pending:false});}};
  if(state.receipt)return <Panel><Heading>Request received</Heading><Notice>Reference: {state.receipt}</Notice><Body>Your inquiry is saved. The internal notification is queued; this does not confirm an email was delivered. Our team can review your requirements before agreeing next steps.</Body><TextLink href="/">Return home</TextLink></Panel>;
- return <Stack className="max-w-2xl mx-auto"><Heading>{state.reviewing?'Review your request':'Request an infrastructure assessment'}</Heading><Body>Share your requirements. Do not include confidential engineering documents or access credentials.</Body>
+ return <Stack className="max-w-2xl mx-auto"><Heading>{state.reviewing?'Review your request':'Your requirements'}</Heading><Body>Share your requirements. Do not include confidential engineering documents or access credentials.</Body>
  <Form onSubmit={event=>{event.preventDefault();if(state.reviewing)void submit();else store.setState({reviewing:true});}}>
  <Fields disabled={state.reviewing||state.attempted}>
- <Select id="intake-role" label="Your role" value={form.userType} onValue={v=>update('userType',v)} options={[{value:'developer',label:'Enterprise buyer / Developer'},{value:'investor',label:'Investor'},{value:'operator',label:'Operator / Supplier'},{value:'advisor',label:'Advisor'}]}/>
+ <Select id="intake-role" label="Your role" value={form.userType} onValue={v=>update('userType',v)} options={[{value:'developer',label:'Enterprise buyer / Developer'},{value:'investor',label:'Investor'},{value:'operator',label:'Operator / Supplier'},{value:'advisor',label:'Advisor / Public sector'}]}/>
  <Field id="intake-name" label="Full name" autoComplete="name" required maxLength={150} value={form.name} onValue={v=>update('name',v)}/>
  <Field id="intake-email" label="Work email" type="email" autoComplete="email" required maxLength={254} value={form.email} onValue={v=>update('email',v)}/>
  <Field id="intake-company" label="Organization" autoComplete="organization" required maxLength={200} value={form.organization} onValue={v=>update('organization',v)}/>

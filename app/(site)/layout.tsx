@@ -3,41 +3,9 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/layout/Footer';
-import GlobalCTA from '@/components/layout/GlobalCTA';
-import ChatBot from '@/components/ChatBot';
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-jetbrains-mono',
-  display: 'swap',
-});
-
-export const metadata: Metadata = {
-  title: 'InFraX | The Intelligence Layer for AI-Scale Infrastructure',
-  description:
-    'InfraX aligns power, land, capital, and operators using physics-first modeling and real utility constraints via Infra-Align™.',
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-white" suppressHydrationWarning>
-        <Header />
-        <main>
-          {children}
-          <GlobalCTA />
-        </main>
-        <Footer />
-        <ChatBot />
-      </body>
-    </html>
-  );
+const inter = Inter({subsets:['latin'],weight:['300','400','500','600','700','800'],variable:'--font-inter',display:'swap'});
+const jetbrainsMono = JetBrains_Mono({subsets:['latin'],weight:['400','500'],variable:'--font-jetbrains-mono',display:'swap'});
+export const metadata:Metadata={title:'InFraX | AI infrastructure advisory',description:'Assess power, cooling, location, delivery and capital requirements with InFraX infrastructure advisory.'};
+export default function RootLayout({children}:{children:React.ReactNode}){
+ return <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}><body className="min-h-screen bg-white"><Header authAvailable={Boolean(process.env.INFRAX_CMS_DATABASE_URL && process.env.BETTER_AUTH_SECRET)}/><main id="main-content" tabIndex={-1}>{children}</main><Footer/></body></html>;
 }

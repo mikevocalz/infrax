@@ -22,7 +22,7 @@ export function SignInForm({allowSignup=false}:{allowSignup?:boolean}){
  <Field id="auth-password" label="Password" type="password" autoComplete={s.creating?'new-password':'current-password'} minLength={s.creating?12:1} value={s.password} onValue={password=>store.setState({password})} required maxLength={128} disabled={s.pending}/>
  {s.error?<Notice error>{s.error}</Notice>:null}
  <Action type="submit" disabled={s.pending} aria-busy={s.pending}>{s.pending?'Checking account…':s.creating?'Create account':'Sign in'}</Action>
- {allowSignup?<Action disabled={s.pending} onClick={()=>store.setState({creating:!s.creating,error:'',password:''})}>{s.creating?'Already registered? Sign in':'Create account'}</Action>:<Body>Account registration is currently invitation-only. No password-reset email is promised by this screen.</Body>}
+ {allowSignup?<Action disabled={s.pending} onClick={()=>store.setState({creating:!s.creating,error:'',password:''})}>{s.creating?'Already registered? Sign in':'Create account'}</Action>:<Body>Account registration is currently invitation-only. Contact InFraX for access or help signing in.</Body>}
  </Form><TextLink href="/contact">Contact InFraX</TextLink></Panel>;
 }
 export function SignOutButton(){
