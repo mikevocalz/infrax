@@ -4,6 +4,7 @@ on:
     paths:
       - '.github/workflows/infrax-evidence-review.yml'
       - 'scripts/normalization/**'
+      - 'db/migrations/*context*'
       - 'backend/research*'
       - 'client/research*'
       - 'components/features/research/**'
@@ -18,15 +19,32 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: '${{ github.event.pull_request.head.sha }}'
-          persist-credentials: false
+        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
       - name: Export tracked source only, excluding runtime secrets
         run: |
           mkdir -p evidence-source
           git archive HEAD app backend client cms components db docs lib scripts .github package.json package-lock.json payload.config.ts types.ts constants.tsx next.config.ts tsconfig.json tailwind.config.ts postcss.config.mjs vercel.json > evidence-source/implementation.tar
       - uses: actions/upload-artifact@v4
-        with:
-          name: infrax-evidence-source
-          path: evidence-source/
-          retention-days: 1
+        with: {name: infrax-evidence-source, path: evidence-source/, retention-days: 1}
+  import-boundaries:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    services:
+      postgres:
+        image: postgres:18
+        env: {POSTGRES_USER: postgres, POSTGRES_PASSWORD: evidence-ci-only, POSTGRES_DB: infrax}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d infrax"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      CI: 'true'
+      INFRAX_TEST_DATABASE_URL: postgresql://postgres:evidence-ci-only@127.0.0.1:5432/infrax
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: node scripts/normalization/test_import_sql.mjs
