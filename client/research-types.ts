@@ -1,0 +1,2 @@
+export type ContextRow=Readonly<{dataset:string;state:string;period:string;title:string;recordCount:number;distinctKeys:number;entityKind:string;sourceUrl:string;sourceSha256:string;outputSha256:string;normalizationVersion:string;sourceRetrievedAt:string|null;importedAt:string|null;quality:ReadonlyArray<{field:string;status:'reported'|'missing'|'invalid';count:number}>;publication:'internal_review';isCapacityOffer:false}>;
+export type ResearchResponse=Readonly<{schema:'infrax-market-context-v2';status:'ready'|'empty';state:string;data:readonly ContextRow[];warning:string}>;

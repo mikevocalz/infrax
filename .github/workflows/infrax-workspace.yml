@@ -1,0 +1,47 @@
+name: InFraX all workspace screens (no deployment)
+on:
+  pull_request:
+    paths: ['universal/**', 'backend/workspace*', 'db/migrations/20261107_010*', '.github/workflows/infrax-workspace.yml']
+permissions: {contents: read}
+jobs:
+  screens:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      EXPO_NO_TELEMETRY: '1'
+      INFRAX_UPSTREAM_ORIGIN: http://127.0.0.1:3199
+      INFRAX_UPSTREAM_ALLOWED_HOST: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: node --test backend/workspace.test.mjs universal/tests/workspace.test.mjs
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: universal
+      - run: npm run typecheck && npm run build:web && npm run bundle:native
+        working-directory: universal
+      - name: Install isolated browser audit tools
+        run: |
+          npm install --prefix /tmp/infrax-universal-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+          /tmp/infrax-universal-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise every screen through the real built HTTP proxy
+        working-directory: universal
+        run: |
+          set -euo pipefail
+          mkdir -p ../host-results
+          npm run start --workspace=@infrax/research-web > ../host-results/workspace-server.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do if curl -fsS http://127.0.0.1:3100/ >/dev/null; then break; fi; sleep 2; done
+          node tests/screens-browser.mjs
+      - name: Capture tracked implementation for independent review
+        if: always()
+        run: |
+          mkdir -p host-results
+          git archive --format=tar HEAD universal backend db client/research-client.mjs client/research-client.d.mts client/research-contract.mjs client/research-contract.d.mts client/research-types.ts > host-results/workspace-source.tar
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: infrax-workspace-screens, path: host-results/, retention-days: 3}

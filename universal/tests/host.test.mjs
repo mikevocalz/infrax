@@ -1,0 +1,18 @@
+import{test}from'node:test';import assert from'node:assert/strict';
+import{boundedRegion,researchLayout}from'../shared/layout.mjs';
+import{forwardResearch}from'../shared/research-proxy.mjs';
+const opts={origin:'https://api.infrax.example',allowedHost:'api.infrax.example'};
+const req=(query='?state=TX',cookie='better-auth.session_token=test')=>new Request('https://app.infrax.example/api/v1/research/context'+query,{headers:cookie?{cookie}:{}});
+test('layout adapts to usable region, not total device width',()=>{assert.equal(researchLayout({x:574,y:0,width:540,height:900}).columns,1);assert.equal(researchLayout({x:0,y:0,width:1100,height:900}).columns,2);assert.equal(researchLayout({x:0,y:0,width:1100,height:900},2).columns,1);});
+test('invalid geometry is not accepted as a detected hinge',()=>{for(const width of [0,-1,NaN])assert.throws(()=>boundedRegion({x:0,y:0,width,height:900}));});
+test('unconfigured proxy fails closed',async()=>assert.equal((await forwardResearch(req())).status,503));
+test('anonymous requests never reach upstream',async()=>{let calls=0;const r=await forwardResearch(req('',null),{...opts,fetchImpl:async()=>{calls++;return Response.json({});}});assert.equal(r.status,401);assert.equal(calls,0);});
+test('client cannot select destination or duplicate state',async()=>{for(const query of ['?state=TX&url=https://evil.example','?state=TX&state=VA','?state=tx'])assert.equal((await forwardResearch(req(query),opts)).status,400);});
+test('host mismatch and self-proxy are refused',async()=>{assert.equal((await forwardResearch(req(),{...opts,allowedHost:'evil.example'})).status,400);assert.equal((await forwardResearch(req(),{origin:'https://app.infrax.example',allowedHost:'app.infrax.example'})).status,400);});
+test('staff denial propagates without leaking upstream text',async()=>{const r=await forwardResearch(req(),{...opts,fetchImpl:async()=>new Response('secret details',{status:403})});assert.equal(r.status,403);assert.doesNotMatch(await r.text(),/secret/);});
+test('only session cookie is forwarded; redirects are disabled',async()=>{let seen;await forwardResearch(req(),{...opts,fetchImpl:async(u,o)=>{seen={u,o};return new Response('',{status:401});}});assert.equal(seen.o.redirect,'error');assert.deepEqual(Object.keys(seen.o.headers).sort(),['Accept','Cookie']);assert.equal(new URL(seen.u).pathname,'/api/v1/research/context');});
+test('empty means validated empty not fake records',async()=>{const r=await forwardResearch(req(),{...opts,fetchImpl:async()=>Response.json({schema:'infrax-market-context-v2',state:'TX',status:'empty',data:[]})});assert.equal(r.status,200);assert.equal((await r.json()).status,'empty');assert.match(r.headers.get('cache-control'),/no-store/);});
+test('unrecognized upstream structure is rejected',async()=>assert.equal((await forwardResearch(req(),{...opts,fetchImpl:async()=>Response.json({data:[{capacity:100}]})})).status,503));
+test('oversized upstream is rejected',async()=>{const r=await forwardResearch(req(),{...opts,fetchImpl:async()=>new Response('x'.repeat(65537),{headers:{'Content-Type':'application/json'}})});assert.equal(r.status,502);});
+test('unexpected content type is refused',async()=>assert.equal((await forwardResearch(req(),{...opts,fetchImpl:async()=>new Response('<html>Login</html>',{headers:{'Content-Type':'text/html'}})})).status,502));
+test('private permission and credential details cannot enter error bodies',async()=>{const r=await forwardResearch(req(),{...opts,fetchImpl:async()=>{throw Error('postgres password secret');}});assert.equal(r.status,503);assert.doesNotMatch(await r.text(),/postgres|secret|password/);});

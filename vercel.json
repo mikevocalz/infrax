@@ -1,8 +1,1 @@
-{
-  "framework": "nextjs",
-  "git": {
-    "deploymentEnabled": {
-      "feat/infrax-api-integration-20261106": false
-    }
-  }
-}
+{"framework":"nextjs","git":{"deploymentEnabled":false}}

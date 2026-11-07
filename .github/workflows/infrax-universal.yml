@@ -1,0 +1,80 @@
+name: InFraX mounted shared web and native feature (no deployment)
+on:
+  pull_request:
+    paths: ['universal/**', 'client/research*', '.github/workflows/infrax-universal.yml']
+permissions: {contents: read}
+jobs:
+  shared-host:
+    permissions: {contents: write}
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      EXPO_NO_TELEMETRY: '1'
+      INFRAX_UPSTREAM_ORIGIN: http://127.0.0.1:3199
+      INFRAX_UPSTREAM_ALLOWED_HOST: 127.0.0.1
+    defaults:
+      run: {working-directory: universal}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Check immutable NYC-Tron release digests
+        run: |
+          mkdir -p ../host-results
+          node --input-type=module <<'NODE'
+          import{createHash}from'node:crypto';import fs from'node:fs';
+          const expected={core:'6425aeda73bdab7a91f5a1b02c62a9919a1b7af1516a4338522fb8154b2fe857',ui:'5c8e34cbe826136fdd105d0859e0cd307075aa62fe1b05ce50efd0e36874953a','reserved-regions':'9fd017e259bd80fd9030f73d6ad9e5734a9a099d78ced79a06b26b79463832c2'};
+          const result=[];
+          for(const[name,hash]of Object.entries(expected)){
+           const url=`https://github.com/mikevocalz/NYC-Tron-UI/releases/download/v0.1.0-alpha.4/nyc-tron-${name}-0.1.0-alpha.4.tgz`;
+           const r=await fetch(url,{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(name+' '+r.status);
+           const bytes=Buffer.from(await r.arrayBuffer());if(bytes.length>3000000)throw Error('Unexpected archive size');
+           const actual=createHash('sha256').update(bytes).digest('hex');if(actual!==hash)throw Error('Release digest changed '+name);
+           result.push({name,url,sha256:actual,bytes:bytes.length});
+          }
+          fs.writeFileSync('../host-results/ui-packages.json',JSON.stringify(result,null,2));
+          NODE
+      - name: Install exact application dependencies
+        run: |
+          if [ -f package-lock.json ]; then npm ci --ignore-scripts --no-audit --no-fund; else npm install --ignore-scripts --no-audit --no-fund; fi
+          cp package-lock.json ../host-results/universal-package-lock.json
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build:web
+      - name: Export Android and iOS JavaScript bundles (not native binaries)
+        run: npm run bundle:native
+      - name: Install isolated browser verification
+        run: |
+          npm install --prefix /tmp/infrax-universal-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+          /tmp/infrax-universal-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise same shared feature through actual Next HTTP proxy
+        run: |
+          set -euo pipefail
+          npm run start --workspace=@infrax/research-web > ../host-results/web.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do if curl -fsS http://127.0.0.1:3100/ >/dev/null; then break; fi; sleep 2; done
+          node tests/browser.mjs
+      - name: Verify clean lockfile install
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Persist only the verified lockfile
+        env:
+          LOCK_COMMIT_TOKEN: ${{ github.token }}
+        run: node scripts/persist-lock.mjs
+      - name: Capture reproducible tracked source and bundle inventory
+        if: always()
+        run: |
+          git -C .. archive --format=tar HEAD universal client/research-client.mjs client/research-client.d.mts client/research-contract.mjs client/research-contract.d.mts client/research-types.ts > ../host-results/tracked-source.tar
+          if [ -d dist/native ]; then find dist/native -type f -printf '%P %s bytes\n' > ../host-results/native-bundles.txt; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: infrax-universal-host
+          path: host-results/
+          retention-days: 3

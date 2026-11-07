@@ -1,0 +1,19 @@
+{
+  "schema_version":"infrax-context-v1",
+  "verification_scope":"Local selected-worksheet normalization, not full workbook coverage or row-level Neon import",
+  "total_normalized_rows":156728,
+  "state_dataset_summaries":306,
+  "db_imported":false,
+  "deterministic_replay":true,
+  "replay_method":"Six output hashes identical; repeat executed in two bounded processes",
+  "all_record_checksums_valid":true,
+  "all_record_keys_unique_within_dataset":true,
+  "datasets":[
+    {"dataset":"eia860-generators-2025","normalized_rows":36573,"output_sha256":"145c1eddc36d1187c0a6104a8e4462194e0c314a5e57d22f0865e9d6ff94d5d9","source_package_sha256":"2b27929d26cc1da9ad6a530da1cac6718cd8496098ee560c4d47cfffd96d08ba","duplicate_entity_keys":0},
+    {"dataset":"eia860m-generators-2026-09","normalized_rows":39908,"output_sha256":"b9cb8d62c0bcdff0c174d4b9691e0d8c5f59ca32878c0aa4909cb4c0f895437f","source_package_sha256":"bcef74e1af991680731aeecfda967f5950db4ce739bb584edd8b8774c7e6da17","duplicate_entity_keys":0},
+    {"dataset":"eia861-utility-counties-2025","normalized_rows":11803,"output_sha256":"47afe3d9018e95bbc2edb5fdec96be33d15cbcd93ca773a93115dd7f548c7cb3","source_package_sha256":"f59f6c732bf685fe0a1591b32227f5ce572dc0dfd26bb5caaeed128ac4e3a396","duplicate_entity_keys":0},
+    {"dataset":"eia923-generation-fuel-2025","normalized_rows":18888,"output_sha256":"6fc2576bbea1c65c9e7ee0946430d7793a9b46db457f945e37f092a4858d3891","source_package_sha256":"1bff7092a86f6678c069c986829da5a23104048fc1aafb65b0776e3c904284de","duplicate_entity_keys":310},
+    {"dataset":"lbnl-queue-through-2025","normalized_rows":36944,"output_sha256":"0bb811f311cd8e83f4179a0928bb5a170ca61cc7773c2c2a665a4770034ea0f0","source_package_sha256":"794582d3281c6a305e9615fcfec3fae9dc85be2165216d33760b677e976a08b6","duplicate_entity_keys":104},
+    {"dataset":"egrid-plants-2023-rev2","normalized_rows":12612,"output_sha256":"07278916fb09fe6fa50f7973c69114125314fe0728f12bb9322672206e35a48d","source_package_sha256":"895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6","duplicate_entity_keys":0}
+  ]
+}

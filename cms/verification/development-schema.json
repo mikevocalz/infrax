@@ -1,0 +1,23 @@
+{
+ "verifiedAt":"2026-11-06",
+ "projectId":"spring-glitter-25305067",
+ "branchId":"br-holy-mode-bcenb3y8",
+ "database":"infrax",
+ "sourceMigrationBlob":"396a0680a6060a4803316ea49111699eb5cab3ec",
+ "sourceSnapshotBlob":"ae675563cd63aca3fa6f0a24b9936a0d1aa02302",
+ "ciRun":42294754515,
+ "tables":25,
+ "matchedStructuralFingerprints":{
+   "columns":{"count":159,"md5":"53a5f5eff6b87c3e6c9fed68d36160f3"},
+   "indexes":{"count":86,"md5":"ab672c570f0c1119b6c4bf90eb0b16c5"},
+   "foreignKeys":{"count":32,"md5":"52d08c13a45a934b7931d49409b015d9"},
+   "enums":{"count":7,"md5":"c6cec84b386920eb48acc16a80a4ea2f"}
+ },
+ "retainedTestUsers":0,
+ "retainedTestSessions":0,
+ "retainedTestAccounts":0,
+ "publishedOrDraftPages":0,
+ "productionChanged":false,
+ "stagingChanged":false,
+ "liveHostedHttpToNeonVerified":false
+}

@@ -1,0 +1,1 @@
+{"expo":{"name":"InFraX Source Review","slug":"infrax-source-review","scheme":"infrax","version":"0.1.0","orientation":"default","userInterfaceStyle":"light","newArchEnabled":true,"ios":{"supportsTablet":true,"bundleIdentifier":"com.infrax.research.development"},"android":{"package":"com.infrax.research.development"},"plugins":["expo-router"]}}
