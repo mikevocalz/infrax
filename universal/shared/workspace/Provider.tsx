@@ -12,14 +12,15 @@ export function WorkspaceProvider({origin,children,makeId}:{origin?:string;child
  if(!ref.current)ref.current=createStore<State>(()=>({session:null,sessionState:'loading',orgId:'',workspace:'client',epoch:0,drawer:false,drafts:{},pending:{},selected:{},preferences:{contrast:false,largeText:false,reduceMotion:false}}));
  const store=ref.current,epoch=useStore(store,s=>s.epoch);
  const client=useMemo(()=>{try{return origin?createWorkspaceClient({baseUrl:origin,makeId}):null;}catch{return null;}},[origin,makeId]);
- useEffect(()=>{if(!client){store.setState({sessionState:'unavailable',session:null});return;}
+ useEffect(()=>{
+  if(!client){store.setState({sessionState:'unavailable',session:null});return;}
   const controller=new AbortController();store.setState({sessionState:'loading'});
   client.session({signal:controller.signal}).then((session:Session)=>{
    if(controller.signal.aborted)return;
    if(!session||!Array.isArray(session.organizations)||typeof session.capabilities!=='object'||session.organizations.some(o=>typeof o.id!=='string'||typeof o.name!=='string')||(session.user&&typeof session.user.id!=='string'))throw Error('Invalid session');
-   const previous=store.getState();const changed=previous.session?.user?.id!==session.user?.id;
+   const previous=store.getState(),changed=previous.session?.user?.id!==session.user?.id;
    const orgId=session.organizations.some(o=>o.id===previous.orgId)?previous.orgId:session.organizations[0]?.id??'';
-   store.setState({session,sessionState:'ready',orgId,...(changed?{drafts:{},pending:{},selected:{},drawer:false}:{} )});
+   store.setState({session,sessionState:'ready',orgId,...(changed?{drafts:{},pending:{},selected:{},drawer:false}:{})});
   }).catch(()=>{if(!controller.signal.aborted)store.setState({session:null,sessionState:'unavailable',drafts:{},pending:{},selected:{}});});
   return()=>controller.abort();
  },[client,store,epoch]);
@@ -36,14 +37,26 @@ export function refreshSession(store:StoreApi<State>){store.setState(s=>({epoch:
 export type LoadState={status:'loading'|'ready'|'empty'|'error';data:Item[];error:string;nextCursor:string|null};
 export function useRecords(resource:string,options:{id?:string;parent?:string;publicFeed?:boolean;enabled?:boolean}={}){
  const{client,store}=useApp(),orgId=useStore(store,s=>s.orgId),subject=useStore(store,s=>s.session?.user?.id),epoch=useStore(store,s=>s.epoch);
- const ref=useRef<StoreApi<LoadState&{refresh:number}>|null>(null);if(!ref.current)ref.current=createStore(()=>({status:'loading' as const,data:[],error:'',nextCursor:null,refresh:0}));
+ const ref=useRef<StoreApi<LoadState&{refresh:number}>|null>(null);
+ if(!ref.current)ref.current=createStore<LoadState&{refresh:number}>(()=>({status:'loading',data:[],error:'',nextCursor:null,refresh:0}));
  const local=ref.current,value=useStore(local),{id,parent,publicFeed=false,enabled=true}=options;
- useEffect(()=>{const controller=new AbortController();local.setState({status:'loading',data:[],error:'',nextCursor:null});
-  if(!enabled){local.setState({status:'empty'});return()=>controller.abort();}
-  if(!client){local.setState({status:'error',error:'UNAVAILABLE'});return()=>controller.abort();}
+ const generation=useRef(0);
+ const verify=(result:any)=>{if(!result||!Array.isArray(result.data)||result.data.length>100||result.data.some((r:Item)=>!r||typeof r.id!=='string'))throw Error('Invalid list');return result;};
+ useEffect(()=>{
+  const current=++generation.current,controller=new AbortController();
+  local.setState({status:'loading',data:[],error:'',nextCursor:null});
+  if(!enabled){local.setState({status:'empty'});return()=>{generation.current++;controller.abort();};}
+  if(!client){local.setState({status:'error',error:'UNAVAILABLE'});return()=>{generation.current++;controller.abort();};}
   const promise=publicFeed?client.feed(resource,{signal:controller.signal}):client.list(resource,{organizationId:orgId||undefined,id,parent,signal:controller.signal});
-  promise.then(result=>{if(controller.signal.aborted)return;if(!result||!Array.isArray(result.data)||result.data.length>100||result.data.some((r:Item)=>!r||typeof r.id!=='string'))throw Error('Invalid list');local.setState({status:result.data.length?'ready':'empty',data:result.data,error:'',nextCursor:result.nextCursor??null});}).catch(error=>{if(!controller.signal.aborted)local.setState({status:'error',data:[],error:error instanceof WorkspaceError?error.code:'UNAVAILABLE'});});
-  return()=>controller.abort();
+  promise.then(raw=>{if(controller.signal.aborted||current!==generation.current)return;const result=verify(raw);local.setState({status:result.data.length?'ready':'empty',data:result.data,error:'',nextCursor:result.nextCursor??null});}).catch(error=>{if(!controller.signal.aborted&&current===generation.current)local.setState({status:'error',data:[],error:error instanceof WorkspaceError?error.code:'UNAVAILABLE'});});
+  return()=>{generation.current++;controller.abort();};
  },[client,orgId,subject,epoch,resource,id,parent,publicFeed,enabled,value.refresh,local]);
- return {...value,reload:()=>local.setState(s=>({refresh:s.refresh+1})),async loadMore(){if(!value.nextCursor||!client)return;try{const result=publicFeed?await client.feed(resource,{after:value.nextCursor}):await client.list(resource,{organizationId:orgId||undefined,parent,after:value.nextCursor});if(!Array.isArray(result.data))throw Error();local.setState(s=>({data:[...s.data,...result.data.filter((r:Item)=>!s.data.some(old=>old.id===r.id))],nextCursor:result.nextCursor??null}));}catch{local.setState({error:'UNAVAILABLE'});}}};
+ return {...value,reload:()=>local.setState(s=>({refresh:s.refresh+1})),async loadMore(){
+  if(!value.nextCursor||!client)return;
+  const current=generation.current;
+  try{const result=verify(publicFeed?await client.feed(resource,{after:value.nextCursor}):await client.list(resource,{organizationId:orgId||undefined,parent,after:value.nextCursor}));
+   if(current!==generation.current)return;
+   local.setState(s=>({data:[...s.data,...result.data.filter((r:Item)=>!s.data.some(old=>old.id===r.id))],nextCursor:result.nextCursor??null}));
+  }catch{if(current===generation.current)local.setState({error:'UNAVAILABLE'});}
+ }};
 }
