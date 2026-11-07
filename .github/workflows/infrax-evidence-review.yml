@@ -1,0 +1,32 @@
+name: InFraX evidence review integration (no deployment)
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/infrax-evidence-review.yml'
+      - 'scripts/normalization/**'
+      - 'backend/research*'
+      - 'client/research*'
+      - 'components/features/research/**'
+      - 'components/ui/research*'
+      - 'app/api/v1/research/**'
+permissions:
+  contents: read
+jobs:
+  source:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.event.pull_request.head.sha }}'
+          persist-credentials: false
+      - name: Export tracked source only, excluding runtime secrets
+        run: |
+          mkdir -p evidence-source
+          git archive HEAD app backend client cms components db docs lib scripts .github package.json package-lock.json payload.config.ts types.ts constants.tsx next.config.ts tsconfig.json tailwind.config.ts postcss.config.mjs vercel.json > evidence-source/implementation.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: infrax-evidence-source
+          path: evidence-source/
+          retention-days: 1
