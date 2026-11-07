@@ -1,0 +1,27 @@
+name: InFraX normalization and research policy (offline, no deployment)
+on:
+  pull_request:
+    paths:
+      - 'scripts/normalization/**'
+      - 'backend/research*'
+      - 'client/research*'
+      - 'components/**'
+      - 'app/**'
+      - '.github/workflows/infrax-normalization.yml'
+permissions:
+  contents: read
+jobs:
+  parsers-and-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: python -m unittest discover -s scripts/normalization -p 'test_*.py' -v
+      - run: node --test backend/research.test.mjs

@@ -1,0 +1,2 @@
+export type ContextRow={dataset:string;state:string;period:string;title:string;recordCount:number;distinctKeys:number;entityKind:string;sourceUrl:string;sourceSha256:string;normalizationVersion:string;quality:ReadonlyArray<{field:string;status:'reported'|'missing'|'invalid';count:number}>;publication:'internal_review';isCapacityOffer:false};
+export type ResearchResponse={schema:'infrax-market-context-v1';status:'ready'|'empty';state:string;data:ContextRow[];warning:string};
