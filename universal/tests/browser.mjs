@@ -3,6 +3,8 @@
  */
 import http from 'node:http';import fs from 'node:fs';import assert from 'node:assert/strict';
 import{chromium}from'/tmp/infrax-universal-tools/node_modules/playwright/index.mjs';
+import{createRequire}from'node:module';
+const require=createRequire(import.meta.url),{default:AxeBuilder}=require('/tmp/infrax-universal-tools/node_modules/@axe-core/playwright');
 import{DATASETS}from'../../client/research-contract.mjs';
 const requests=[];
 const upstream=http.createServer((req,res)=>{
@@ -18,7 +20,7 @@ const upstream=http.createServer((req,res)=>{
  return send(200,{schema:'infrax-market-context-v2',status:state==='DC'?'empty':'ready',state,data:state==='DC'?[]:[row]});
 });
 await new Promise(resolve=>upstream.listen(3199,'127.0.0.1',resolve));
-const browser=await chromium.launch(),report={scope:'Universal RN-Web feature with synthetic HTTP upstream, not real staff authentication or native binaries',layouts:[],errors:[],failures:[]};
+const browser=await chromium.launch(),report={scope:'Universal RN-Web feature with synthetic HTTP upstream, not real staff authentication or native binaries',layouts:[],accessibility:[],errors:[],failures:[]};
 fs.mkdirSync('../host-results',{recursive:true});
 try{
  for(const spec of [{id:'phone',width:390,height:844},{id:'tablet',width:768,height:1024},{id:'desktop',width:1440,height:900},{id:'book',width:1114,height:900,orientation:'vertical',offset:540,maskLength:34},{id:'tabletop',width:900,height:1240,orientation:'horizontal',offset:600,maskLength:40}]){
@@ -35,11 +37,14 @@ try{
   const root=await page.getByTestId('research-frame').boundingBox();
   if(spec.orientation==='vertical')assert.ok(root.x+root.width<=spec.offset+1);
   if(spec.orientation==='horizontal')assert.ok(root.y+root.height<=spec.offset+1);
-  const region=page.getByRole('textbox',{name:'State or territory code'});
+  const region=page.getByRole('textbox',{name:'State or territory'});
   await region.fill('VA');await page.getByRole('button',{name:'Load region',exact:true}).click();await page.getByText('VA · 1 source datasets',{exact:true}).waitFor();
   await region.fill('DC');await page.getByRole('button',{name:'Load region',exact:true}).click();await page.getByText(/No imported summaries for this region/).waitFor();
   await region.fill('AK');await page.getByRole('button',{name:'Load region',exact:true}).click();await page.getByText(/research service is unavailable/).waitFor();
   await region.fill('TX');await page.getByRole('button',{name:'Load region',exact:true}).click();await page.getByText('TX · 1 source datasets',{exact:true}).waitFor();
+  const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+  report.accessibility.push({layout:spec.id,violations:axe.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)}))});
+  assert.equal(axe.violations.filter(v=>['critical','serious'].includes(v.impact)).length,0);
   const capture=await cdp.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync('../host-results/'+spec.id+'.png',Buffer.from(capture.data,'base64'));
   if(spec.orientation){await cdp.send('Emulation.clearDisplayFeaturesOverride');await cdp.send('Emulation.clearDevicePostureOverride');await cdp.send('Emulation.clearDeviceMetricsOverride');}
   await page.setViewportSize({width:430,height:900});assert.equal(await region.inputValue(),'TX');

@@ -5,6 +5,7 @@ on:
 permissions: {contents: read}
 jobs:
   shared-host:
+    permissions: {contents: write}
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -50,7 +51,7 @@ jobs:
         run: npm run bundle:native
       - name: Install isolated browser verification
         run: |
-          npm install --prefix /tmp/infrax-universal-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npm install --prefix /tmp/infrax-universal-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
           /tmp/infrax-universal-tools/node_modules/.bin/playwright install --with-deps chromium
       - name: Exercise same shared feature through actual Next HTTP proxy
         run: |
@@ -60,10 +61,16 @@ jobs:
           trap 'kill "$PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 60); do if curl -fsS http://127.0.0.1:3100/ >/dev/null; then break; fi; sleep 2; done
           node tests/browser.mjs
+      - name: Verify clean lockfile install
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Persist only the verified lockfile
+        env:
+          LOCK_COMMIT_TOKEN: ${{ github.token }}
+        run: node scripts/persist-lock.mjs
       - name: Capture reproducible tracked source and bundle inventory
         if: always()
         run: |
-          git archive --format=tar HEAD > ../host-results/tracked-source.tar
+          git -C .. archive --format=tar HEAD universal client/research-client.mjs client/research-client.d.mts client/research-contract.mjs client/research-contract.d.mts client/research-types.ts > ../host-results/tracked-source.tar
           if [ -d dist/native ]; then find dist/native -type f -printf '%P %s bytes\n' > ../host-results/native-bundles.txt; fi
       - uses: actions/upload-artifact@v4
         if: always()

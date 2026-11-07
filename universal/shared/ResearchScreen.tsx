@@ -1,11 +1,11 @@
 import{useEffect,useRef}from'react';
-import{ScrollView,View,TextInput,Linking,useWindowDimensions}from'react-native';
+import{ScrollView,View,Linking,useWindowDimensions}from'react-native';
 import{createStore,type StoreApi}from'zustand/vanilla';import{useStore}from'zustand';
 import{createResearchController,createResearchClient}from'../../client/research-client.mjs';
 import{stateFilter}from'../../client/research-contract.mjs';
 import type{ResearchResponse,ContextRow}from'../../client/research-types';
 import{researchLayout,type Region}from'./layout.mjs';
-import{Heading,Body,Panel,Action,Stack,colors}from'./ui/Primitives';
+import{Heading,Body,Panel,Action,Field,Stack,colors}from'./ui/Primitives';
 type ResearchClient=ReturnType<typeof createResearchClient>;
 type Phase='loading'|'ready'|'empty'|'signed_out'|'forbidden'|'unavailable'|'invalid_response'|'aborted';
 type State={region:string;input:string;status:Phase;result:ResearchResponse|null;selected:string|null;validation:string|null;linkError:boolean};
@@ -35,9 +35,9 @@ export function ResearchScreen({load,sessionScope,region,geometryNotice}:Researc
     <Body>Inspect market context and its evidence. These records are not data centers, available power, or commercial offers.</Body></Stack>
    {geometryNotice?<Panel><Body>{geometryNotice}</Body></Panel>:null}
    {!load?<Panel><Heading>Connection not configured</Heading><Body>This development host needs an approved API origin and an existing staff session. No account is created and no source data is public.</Body></Panel>:<>
-    <Panel><Body nativeID="region-label" style={{fontWeight:'700'}}>State or territory</Body>
+    <Panel>
      <View style={{flexDirection:plan.columns===2?'row':'column',gap:12}}>
-      <TextInput accessibilityLabel="State or territory code" accessibilityLabelledBy="region-label" value={state.input} onChangeText={input=>store.setState({input,validation:null})} autoCapitalize="characters" autoCorrect={false} maxLength={2} returnKeyType="search" onSubmitEditing={choose} style={{fontSize:18,padding:12,minHeight:48,borderWidth:1,borderColor:colors.line,borderRadius:4,color:colors.navy,minWidth:90}}/>
+      <Field id="region" label="State or territory" value={state.input} onChangeText={input=>store.setState({input,validation:null})} autoCapitalize="characters" autoCorrect={false} maxLength={2} returnKeyType="search" onSubmitEditing={choose}/>
       <Action title="Load region" onPress={choose}/><Action secondary title="Refresh evidence" onPress={()=>void controller.current?.select(state.region)}/>
      </View>{state.validation?<Body accessibilityRole="alert">{state.validation}</Body>:null}
     </Panel>
