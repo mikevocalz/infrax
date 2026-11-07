@@ -1,0 +1,14 @@
+export type Workspace='client'|'operator'|'operations';
+export type Org={id:string;name:string;kind:string;role:string};
+export type Session={user:{id:string;name:string;email:string;role:string}|null;organizations:Org[];capabilities:Record<string,boolean>};
+export type Screen={id:string;path:string;workspace:Workspace|'account'|'public';tab:string|null;title:string;component:string;params:Record<string,string>;href:string};
+export const SCREENS:readonly Omit<Screen,'params'|'href'>[];
+export const NAV:Record<Workspace,readonly (readonly string[])[]>;
+export const PUBLIC_HEADER:readonly string[];
+export const DRAWER:readonly (readonly [string,readonly (readonly string[])[]])[];
+export const STEPS:readonly string[];
+export function cleanPath(value:unknown):string|null;
+export function resolveScreen(value:unknown):Screen|null;
+export function route(id:string,params?:Record<string,string>):string;
+export function access(screen:Screen|null,session?:Session|null):'allowed'|'signed_out'|'forbidden'|'not_found';
+export function workspaceFor(screen:Screen|null,fallback?:Workspace):Workspace;
