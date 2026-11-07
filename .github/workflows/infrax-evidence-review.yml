@@ -4,28 +4,15 @@ on:
     paths:
       - '.github/workflows/infrax-evidence-review.yml'
       - 'scripts/normalization/**'
+      - 'scripts/ux/research-audit.mjs'
       - 'db/migrations/*context*'
       - 'backend/research*'
       - 'client/research*'
       - 'components/features/research/**'
       - 'components/ui/research*'
       - 'app/api/v1/research/**'
-permissions:
-  contents: read
+permissions: {contents: read}
 jobs:
-  source:
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-24.04
-    timeout-minutes: 3
-    steps:
-      - uses: actions/checkout@v4
-        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
-      - name: Export tracked source only, excluding runtime secrets
-        run: |
-          mkdir -p evidence-source
-          git archive HEAD app backend client cms components db docs lib scripts .github package.json package-lock.json payload.config.ts types.ts constants.tsx next.config.ts tsconfig.json tailwind.config.ts postcss.config.mjs vercel.json > evidence-source/implementation.tar
-      - uses: actions/upload-artifact@v4
-        with: {name: infrax-evidence-source, path: evidence-source/, retention-days: 1}
   import-boundaries:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
@@ -48,3 +35,66 @@ jobs:
         with: {node-version: '24'}
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: node scripts/normalization/test_import_sql.mjs
+  research-ui:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18
+        env: {POSTGRES_USER: postgres, POSTGRES_PASSWORD: ux-ci-only, POSTGRES_DB: infrax}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d infrax"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      CI: 'true'
+      INFRAX_CMS_TEST_MODE: '1'
+      APP_ENV: development
+      INFRAX_CMS_DATABASE_URL: postgresql://postgres:ux-ci-only@127.0.0.1:5432/infrax
+      INFRAX_PUBLIC_ORIGIN: http://127.0.0.1:3000
+      INFRAX_AUTH_BASE_URL: http://127.0.0.1:3000/api/auth
+      INFRAX_ALLOW_SIGNUP: 'true'
+      PAYLOAD_SECRET: ux-ci-only-payload-secret-not-valid-in-customer-environments
+      BETTER_AUTH_SECRET: ux-ci-only-auth-secret-not-valid-in-customer-environments
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.event.pull_request.head.sha }}', persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: node --test backend/research.test.mjs client/*.test.mjs
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm --prefix backend ci --ignore-scripts --no-audit --no-fund
+      - run: npm run cms:importmap && npm run cms:types
+      - name: Prepare disposable CMS only
+        run: |
+          node --input-type=module <<'NODE'
+          import pg from 'pg';
+          const u=new URL(process.env.INFRAX_CMS_DATABASE_URL);
+          if(u.hostname!=='127.0.0.1'||process.env.CI!=='true')throw Error('Disposable database required');
+          const c=new pg.Client({connectionString:u.href});await c.connect();
+          try{await c.query('CREATE SCHEMA IF NOT EXISTS cms');}finally{await c.end();}
+          NODE
+          npm run cms:migrate
+      - run: npm run typecheck && npm run build
+      - name: Install isolated browser audit tools
+        run: |
+          npm install --prefix /tmp/infrax-ux-tools --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+          /tmp/infrax-ux-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Staff research UI and permission states (synthetic data only)
+        run: |
+          set -euo pipefail
+          npm run start -- --hostname 127.0.0.1 > /tmp/infrax-research-server.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          ready=false
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then ready=true; break; fi
+            sleep 2
+          done
+          if [ "$ready" != true ]; then tail -100 /tmp/infrax-research-server.log; exit 1; fi
+          node scripts/ux/research-audit.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: research-results, path: research-results/, retention-days: 3}

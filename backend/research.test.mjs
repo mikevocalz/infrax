@@ -1,6 +1,6 @@
 import {test}from'node:test';import assert from'node:assert/strict';
 import {createResearchAPI,stateFilter,sourceLink,summarizeRow}from'./research.mjs';
-const row={dataset:'eia860-generators-2025',state:'TX',period:'2025',summary:{source_title:'EIA generators',normalized_rows:5,distinct_entity_keys:5,entity_kind:'generator_inventory',source_url:'https://www.eia.gov/data',source_package_sha256:'a'.repeat(64),normalization_version:'v1',metric_quality:{'nameplate_capacity:reported':4,'nameplate_capacity:missing':1},commercial_offer:false,publication_approved:false}};
+const row={dataset:'eia860-generators-2025',state:'TX',period:'2025',summary:{dataset:'eia860-generators-2025',state:'TX',observation_period:'2025',output_sha256:'b'.repeat(64),source_title:'EIA generators',normalized_rows:5,distinct_entity_keys:5,entity_kind:'generator_inventory',source_url:'https://www.eia.gov/electricity/data/eia860/xls/eia8602025.zip',source_package_sha256:'a'.repeat(64),normalization_version:'infrax-context-v1',metric_quality:{'nameplate_capacity:reported':4,'nameplate_capacity:missing':1},commercial_offer:false,publication_approved:false}};
 const req=()=>new Request('https://infrax.example/api/v1/research/context?state=TX');
 test('anonymous never executes data query',async()=>{let calls=0;const api=createResearchAPI({identity:async()=>null,load:async()=>{calls++;return[row];}});assert.equal((await api(req())).status,401);assert.equal(calls,0);});
 test('client role headers cannot grant staff access',async()=>{const api=createResearchAPI({identity:async()=>({user:{id:'one',role:'user'}}),load:async()=>{throw Error('must not query')}});const r=await api(new Request(req(),{headers:{'x-role':'admin'}}));assert.equal(r.status,403);});
@@ -10,3 +10,13 @@ test('state allowlist rejects injected and malformed filters',()=>{for(const x o
 test('source link blocks off-host, credentials, script and plain HTTP',()=>{for(const x of ['javascript:alert(1)','https://evil.test','https://user:pass@www.eia.gov/data','http://www.eia.gov','https://www.eia.gov.evil.test'])assert.equal(sourceLink(x),null);});
 test('bad source summary fails closed',()=>{for(const patch of [{commercial_offer:true},{publication_approved:true},{normalized_rows:-1},{normalized_rows:'5'},{distinct_entity_keys:6}])assert.throws(()=>summarizeRow({...row,summary:{...row.summary,...patch}}));});
 test('write method is rejected',async()=>{assert.equal((await createResearchAPI({})(new Request(req(),{method:'POST'}))).status,405);});
+test('wrong-state and duplicate source rows cannot become a successful API result',async()=>{
+ const identity=async()=>({user:{id:'admin',role:'admin'}});
+ for(const rows of [[{...row,state:'VA',summary:{...row.summary,state:'VA'}}],[row,row]]){
+  const r=await createResearchAPI({identity,load:async()=>rows})(req());assert.equal(r.status,503);
+ }
+});
+test('ambiguous query filters are rejected before querying',async()=>{
+ const api=createResearchAPI({identity:async()=>({user:{id:'admin',role:'admin'}}),load:async()=>{throw Error('must not query')}});
+ for(const suffix of ['?state=TX&state=VA','?state=TX&role=admin'])assert.equal((await api(new Request('https://infrax.example/api/v1/research/context'+suffix))).status,400);
+});
